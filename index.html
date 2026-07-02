@@ -1,0 +1,1850 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#F6F4EF">
+<title>てがきメモ</title>
+
+<!-- ============ PWA関連 ============ -->
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" href="data:image/jpeg;base64,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" type="image/jpeg">
+<link rel="apple-touch-icon" href="data:image/jpeg;base64,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">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="てがきメモ">
+<meta name="mobile-web-app-capable" content="yes">
+<style>
+  /* ============ デザイントークン ============ */
+  :root {
+    --bg: #F6F4EF;
+    --surface: #FFFFFF;
+    --paper: #FDFCF9;
+    --ink: #26221C;
+    --muted: #8A857C;
+    --line: #E4E0D7;
+    --accent: #2F5AA8;
+    --accent-soft: #E7EDF8;
+    --danger: #C4372C;
+    --danger-soft: #F9E9E7;
+    --shadow: 0 2px 10px rgba(38,34,28,.08);
+    --radius: 14px;
+    --tap: 48px;
+    --edge: 20px;
+  }
+  [data-theme="dark"] {
+    --bg: #17181C;
+    --surface: #22242A;
+    --paper: #ECE9E2;      /* 紙は常に明るく＝インクの視認性を維持 */
+    --ink: #E8E5DE;
+    --muted: #9A968E;
+    --line: #34363E;
+    --accent: #7FA7E8;
+    --accent-soft: #2A3550;
+    --danger: #E06055;
+    --danger-soft: #43272A;
+    --shadow: 0 2px 12px rgba(0,0,0,.4);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    overscroll-behavior: none;
+    touch-action: manipulation;
+  }
+  button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+  button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+  /* ============ 画面共通 ============ */
+  .screen { position: fixed; inset: 0; display: none; flex-direction: column; background: var(--bg); }
+  .screen.active { display: flex; }
+
+  .appbar {
+    display: flex; align-items: center; gap: 4px;
+    padding: calc(env(safe-area-inset-top, 0px) + 10px) 10px 10px;
+    background: var(--surface); border-bottom: 1px solid var(--line);
+    flex-shrink: 0;
+  }
+  .appbar h1 { font-size: 18px; font-weight: 700; letter-spacing: .04em; flex: 1; }
+  .icon-btn {
+    min-width: 44px; min-height: var(--tap);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 20px; border-radius: 12px; flex-shrink: 0;
+  }
+  .icon-btn:active { background: var(--accent-soft); }
+  .back-btn { font-size: 16px; font-weight: 600; color: var(--accent); padding: 0 6px; min-height: var(--tap); flex-shrink: 0; }
+
+  /* ============ 一覧画面 ============ */
+  #folder-bar { padding: 10px 16px 0; }
+  #btn-folder-switch {
+    display: flex; align-items: center; gap: 6px;
+    max-width: 100%; height: 40px; padding: 0 14px 0 12px;
+    background: var(--accent-soft); border: 1px solid var(--line); border-radius: 20px;
+    color: var(--accent); font-size: 14px; font-weight: 700;
+  }
+  #btn-folder-switch:active { opacity: .8; }
+  #btn-folder-switch .folder-icon { font-size: 15px; flex-shrink: 0; }
+  #btn-folder-switch .folder-label {
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 55vw;
+  }
+  #btn-folder-switch .chev { font-size: 11px; opacity: .8; flex-shrink: 0; }
+  #search-wrap { padding: 12px 16px 4px; }
+  #search {
+    width: 100%; height: 44px; padding: 0 16px;
+    border: 1px solid var(--line); border-radius: 22px;
+    background: var(--surface); color: var(--ink); font-size: 16px;
+    -webkit-user-select: text; user-select: text;
+  }
+  #search::placeholder { color: var(--muted); }
+  #note-list { flex: 1; overflow-y: auto; padding: 12px 16px calc(env(safe-area-inset-bottom, 0px) + 96px); }
+  .note-card {
+    width: 100%; text-align: left;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow); margin-bottom: 14px; overflow: hidden;
+  }
+  .note-card:active { transform: scale(.985); }
+  .note-card.pinned { border-color: var(--accent); box-shadow: 0 2px 10px rgba(47,90,168,.16); }
+  .note-card .thumb {
+    display: block; width: 100%; height: 130px; object-fit: cover; object-position: top left;
+    background: #FDFCF9; border-bottom: 1px solid var(--line);
+  }
+  .note-card .info { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 12px 14px; }
+  .note-card .title { font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: flex; align-items: baseline; gap: 4px; min-width: 0; }
+  .note-card .title .pin-mark { flex-shrink: 0; font-size: 12px; }
+  .note-card .title .title-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .note-card .time { font-size: 12px; color: var(--muted); flex-shrink: 0; }
+  .section-header {
+    font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .04em;
+    padding: 4px 4px 8px; display: flex; align-items: center; gap: 4px;
+  }
+  .section-header.pinned-header { color: var(--accent); }
+  #empty-state { text-align: center; color: var(--muted); padding: 64px 24px; font-size: 14px; line-height: 1.9; }
+  #fab {
+    position: fixed; right: 20px; bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
+    height: 56px; padding: 0 22px; border-radius: 28px;
+    background: var(--accent); color: #fff; font-size: 16px; font-weight: 700;
+    box-shadow: 0 4px 14px rgba(47,90,168,.4);
+    display: flex; align-items: center; gap: 6px;
+  }
+  #fab:active { transform: scale(.95); }
+
+  /* ============ 編集画面 ============ */
+  #editor-title {
+    flex: 1; min-width: 0; text-align: center;
+    font-size: 16px; font-weight: 600;
+    background: transparent; border: none;
+    border-bottom: 1.5px dashed transparent;
+    color: var(--ink); padding: 8px 2px; border-radius: 0;
+    -webkit-user-select: text; user-select: text;
+  }
+  #editor-title:focus { border-bottom-color: var(--accent); outline: none; }
+  #editor-title::placeholder { color: var(--muted); }
+
+  /* 編集画面：フォルダ / ピン留め メタバー */
+  .editor-meta-bar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 10px; background: var(--surface); border-bottom: 1px solid var(--line);
+    flex-shrink: 0;
+  }
+  .meta-chip {
+    height: 34px; border-radius: 17px; font-size: 13px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 5px; padding: 0 12px;
+    background: var(--bg); border: 1px solid var(--line); color: var(--ink);
+  }
+  .meta-chip:active { background: var(--accent-soft); }
+  #btn-note-folder { flex: 1; min-width: 0; }
+  #btn-note-folder .folder-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  #btn-pin { flex-shrink: 0; }
+  #btn-pin.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  /* ============ ボトムシート（フォルダ選択） ============ */
+  .sheet-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.32);
+    z-index: 60; opacity: 0; pointer-events: none; transition: opacity .2s;
+  }
+  .sheet-overlay.open { opacity: 1; pointer-events: auto; }
+  .sheet {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 61;
+    background: var(--surface); border-radius: 20px 20px 0 0;
+    box-shadow: 0 -4px 24px rgba(0,0,0,.18);
+    padding: 10px 16px calc(env(safe-area-inset-bottom, 0px) + 16px);
+    max-height: 72vh; display: flex; flex-direction: column;
+    transform: translateY(100%); transition: transform .22s ease;
+  }
+  .sheet.open { transform: translateY(0); }
+  .sheet-handle { width: 40px; height: 4px; border-radius: 2px; background: var(--line); margin: 2px auto 12px; flex-shrink: 0; }
+  .sheet h2 { font-size: 15px; font-weight: 700; margin-bottom: 10px; flex-shrink: 0; }
+  #folder-sheet-list { overflow-y: auto; flex: 1; margin-bottom: 8px; }
+  .folder-row {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; min-height: 52px; padding: 4px 8px; border-radius: 12px;
+    text-align: left;
+  }
+  .folder-row:active { background: var(--accent-soft); }
+  .folder-row.selected { background: var(--accent-soft); }
+  .folder-row .folder-row-icon { font-size: 17px; flex-shrink: 0; }
+  .folder-row .folder-row-name {
+    flex: 1; min-width: 0; font-size: 15px; font-weight: 600;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .folder-row.selected .folder-row-name { color: var(--accent); }
+  .folder-row .folder-row-count { font-size: 12px; color: var(--muted); flex-shrink: 0; }
+  .folder-row .folder-row-del {
+    flex-shrink: 0; min-width: 36px; min-height: 36px; display: inline-flex;
+    align-items: center; justify-content: center; font-size: 15px; color: var(--danger); border-radius: 10px;
+  }
+  .folder-row .folder-row-del:active { background: var(--danger-soft); }
+  .folder-add-row { display: flex; gap: 8px; flex-shrink: 0; padding-top: 8px; border-top: 1px solid var(--line); }
+  .folder-add-row input {
+    flex: 1; min-width: 0; height: 46px; padding: 0 14px;
+    border: 1px solid var(--line); border-radius: 12px;
+    background: var(--bg); color: var(--ink); font-size: 15px;
+    -webkit-user-select: text; user-select: text;
+  }
+  .folder-add-row button {
+    flex-shrink: 0; height: 46px; padding: 0 16px; border-radius: 12px;
+    background: var(--accent); color: #fff; font-size: 14px; font-weight: 700;
+  }
+  .folder-add-row button:active { opacity: .85; }
+  .sheet-close {
+    margin-top: 10px; width: 100%; height: 46px; border-radius: 12px;
+    background: var(--bg); border: 1px solid var(--line); font-size: 14px; font-weight: 600; color: var(--muted);
+    flex-shrink: 0;
+  }
+  .sheet-close:active { background: var(--accent-soft); }
+
+  /* フルスクリーン（没入モード） */
+  #screen-editor .appbar, #screen-editor .editor-bar, #screen-editor .editor-meta-bar { transition: opacity .18s ease; }
+  #screen-editor.fs-anim .appbar, #screen-editor.fs-anim .editor-bar, #screen-editor.fs-anim .editor-meta-bar { opacity: 0; }
+  #screen-editor.fullscreen .appbar, #screen-editor.fullscreen .editor-bar, #screen-editor.fullscreen .editor-meta-bar { display: none; }
+  #btn-fs-exit {
+    display: none;
+    position: absolute; z-index: 6;
+    top: calc(env(safe-area-inset-top, 0px) + 12px);
+    right: calc(var(--edge) + 8px);
+    height: 44px; padding: 0 16px; border-radius: 22px;
+    background: var(--surface); border: 1.5px solid var(--line);
+    font-size: 14px; font-weight: 700; color: var(--ink);
+    box-shadow: var(--shadow); opacity: .93;
+    align-items: center; gap: 6px;
+  }
+  #btn-fs-exit:active { background: var(--accent-soft); opacity: 1; }
+  #screen-editor.fullscreen #btn-fs-exit { display: inline-flex; }
+  #screen-editor.fullscreen #save-chip {
+    top: calc(env(safe-area-inset-top, 0px) + 24px);
+    right: calc(var(--edge) + 160px);
+  }
+  #screen-editor.fullscreen #zoom-chip { top: calc(env(safe-area-inset-top, 0px) + 24px); }
+
+  #canvas-area {
+    flex: 1; position: relative; overflow: hidden;
+    padding: 8px var(--edge);   /* 左右＝戻るジェスチャー誤暴発防止のデッドゾーン */
+    background: var(--bg);
+    -webkit-user-select: none; user-select: none;   /* 描画領域のみ文字選択を禁止（タイトル入力とは分離） */
+  }
+  #canvas-frame {
+    width: 100%; height: 100%; position: relative;
+    border-radius: 10px; box-shadow: var(--shadow);
+    overflow: hidden;
+    background: var(--bg);   /* 紙・背景テンプレートはCanvas側で描画（ズーム追従のため） */
+    border: 1px solid var(--line);
+  }
+  #canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  /* 自動保存ステータスチップ（右上） */
+  #save-chip {
+    position: absolute; top: 14px; right: calc(var(--edge) + 8px); z-index: 5;
+    font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 12px;
+    background: var(--surface); color: var(--muted); border: 1px solid var(--line);
+    opacity: 0; transition: opacity .3s; pointer-events: none;
+  }
+  #save-chip.show { opacity: .95; }
+  #save-chip.saving { color: var(--accent); }
+
+  /* ズーム倍率チップ＝タップで等倍リセット（左上） */
+  #zoom-chip {
+    position: absolute; top: 14px; left: calc(var(--edge) + 8px); z-index: 5;
+    font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 12px;
+    background: var(--surface); color: var(--accent); border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    display: none; align-items: center; gap: 4px;
+  }
+  #zoom-chip.show { display: inline-flex; }
+  #zoom-chip:active { background: var(--accent-soft); }
+
+  .editor-bar {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: var(--surface); border-top: 1px solid var(--line);
+    padding: 6px 10px; flex-shrink: 0;
+  }
+  .editor-bar.bottom { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 6px); }
+  .tool-btn {
+    min-width: var(--tap); min-height: var(--tap);
+    display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+    border-radius: 12px; font-size: 20px; position: relative;
+  }
+  .tool-btn small { font-size: 10px; color: var(--muted); }
+  .tool-btn.selected { background: var(--accent-soft); }
+  .tool-btn.selected small { color: var(--accent); font-weight: 700; }
+  .tool-btn:disabled { opacity: .35; }
+  .tool-btn:not(:disabled):active { background: var(--accent-soft); }
+  .spacer { flex: 1; max-width: 36px; }
+  #btn-trash { color: var(--danger); }
+  #btn-trash small { color: var(--danger); }
+  #color-dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--line); }
+  #width-dot { border-radius: 50%; background: var(--ink); }
+
+  /* 背景ミニプレビュー */
+  .bg-mini {
+    width: 26px; height: 26px; border: 1.5px solid var(--line); border-radius: 6px;
+    background: var(--paper); flex-shrink: 0;
+  }
+  .bgm-dot  { background: radial-gradient(circle, rgba(38,34,28,.45) .8px, transparent 1.2px) 0 0 / 6.5px 6.5px, var(--paper); }
+  .bgm-line { background: repeating-linear-gradient(to bottom, transparent 0 6px, rgba(38,34,28,.4) 6px 7px), var(--paper); }
+  .bgm-plain { background: var(--paper); }
+  .bgm-grid4 {
+    background:
+      linear-gradient(to right,  transparent calc(50% - .8px), rgba(38,34,28,.45) 0 calc(50% + .8px), transparent 0),
+      linear-gradient(to bottom, transparent calc(50% - .8px), rgba(38,34,28,.45) 0 calc(50% + .8px), transparent 0),
+      var(--paper);
+  }
+  .bgm-grid9 {
+    background:
+      linear-gradient(to right,  transparent calc(33.33% - .7px), rgba(38,34,28,.45) 0 calc(33.33% + .7px),
+                      transparent 0 calc(66.66% - .7px), rgba(38,34,28,.45) 0 calc(66.66% + .7px), transparent 0),
+      linear-gradient(to bottom, transparent calc(33.33% - .7px), rgba(38,34,28,.45) 0 calc(33.33% + .7px),
+                      transparent 0 calc(66.66% - .7px), rgba(38,34,28,.45) 0 calc(66.66% + .7px), transparent 0),
+      var(--paper);
+  }
+
+  /* ポップオーバー（太さ・色・背景） */
+  .popover {
+    position: fixed; display: none; gap: 4px; padding: 8px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
+    box-shadow: var(--shadow); z-index: 50;
+  }
+  .popover.open { display: flex; }
+  .pop-item {
+    min-width: 52px; height: 58px; border-radius: 12px; padding: 4px 6px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  }
+  .pop-item.selected { background: var(--accent-soft); }
+  .pop-item small { font-size: 10px; color: var(--muted); }
+  .pop-item.selected small { color: var(--accent); font-weight: 700; }
+  .pop-item .dot { border-radius: 50%; background: var(--ink); }
+  .pop-item .swatch { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--line); }
+
+  /* ============ 設定画面 ============ */
+  #settings-body { flex: 1; overflow-y: auto; padding: 20px 16px calc(env(safe-area-inset-bottom, 0px) + 24px); }
+  .setting-group { margin-bottom: 26px; }
+  .setting-group h2 { font-size: 13px; color: var(--muted); font-weight: 600; margin-bottom: 10px; letter-spacing: .06em; }
+  .setting-btn {
+    width: 100%; min-height: 54px; padding: 0 18px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    font-size: 15px; font-weight: 600; text-align: left;
+    display: flex; align-items: center; gap: 12px; box-shadow: var(--shadow);
+  }
+  .setting-btn:active { background: var(--accent-soft); }
+  .setting-btn.danger { color: var(--danger); border-color: var(--danger); background: var(--danger-soft); }
+  .setting-btn.danger:active { opacity: .8; }
+  .theme-toggle { display: flex; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+  .theme-toggle button { flex: 1; min-height: 54px; font-size: 15px; font-weight: 600; color: var(--muted); }
+  .theme-toggle button.selected { background: var(--accent); color: #fff; }
+  #settings-note, .setting-note { font-size: 12px; color: var(--muted); line-height: 1.8; margin-top: 6px; }
+
+  #toast {
+    position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 90px);
+    transform: translateX(-50%) translateY(20px);
+    background: var(--ink); color: var(--bg);
+    padding: 10px 20px; border-radius: 22px; font-size: 14px;
+    opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; z-index: 100;
+    max-width: 86vw; text-align: center;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- ============ 1. メモ一覧画面 ============ -->
+<section id="screen-list" class="screen active">
+  <header class="appbar">
+    <h1>てがきメモ</h1>
+    <button class="icon-btn" id="btn-settings" aria-label="設定">⚙️</button>
+  </header>
+  <div id="folder-bar">
+    <button id="btn-folder-switch" aria-label="フォルダを切り替え">
+      <span class="folder-icon">📁</span>
+      <span class="folder-label" id="folder-bar-label">すべてのメモ</span>
+      <span class="chev">▾</span>
+    </button>
+  </div>
+  <div id="search-wrap">
+    <input id="search" type="search" placeholder="メモの名前で検索" autocomplete="off">
+  </div>
+  <div id="note-list"><div id="empty-state">読み込み中…</div></div>
+  <button id="fab">＋ 新規メモ</button>
+</section>
+
+<!-- ============ 2. メモ編集画面 ============ -->
+<section id="screen-editor" class="screen">
+  <header class="appbar">
+    <button class="back-btn" id="btn-editor-back">◀ 戻る</button>
+    <input id="editor-title" type="text" maxlength="40" placeholder="メモの名前" autocomplete="off" enterkeyhint="done">
+    <button class="icon-btn" id="btn-fs" aria-label="フルスクリーン">⛶</button>
+    <button class="icon-btn" id="btn-save-image" aria-label="画像として保存・共有">💾</button>
+  </header>
+
+  <div class="editor-meta-bar">
+    <button class="meta-chip" id="btn-note-folder" aria-label="フォルダを変更">
+      📁 <span class="folder-label" id="note-folder-label">すべてのメモ</span>
+    </button>
+    <button class="meta-chip" id="btn-pin" aria-label="ピン留め">📌 <span id="pin-label">ピン留め</span></button>
+  </div>
+
+  <div id="canvas-area">
+    <div id="canvas-frame"><canvas id="canvas"></canvas></div>
+    <span id="save-chip">保存済み ✓</span>
+    <button id="zoom-chip" aria-label="ズームをリセット">100% ⟲</button>
+    <button id="btn-fs-exit" aria-label="フルスクリーンを解除">✕ 全画面解除</button>
+  </div>
+
+  <div class="editor-bar">
+    <button class="tool-btn" id="btn-undo" aria-label="元に戻す">↩️<small>戻す</small></button>
+    <button class="tool-btn" id="btn-redo" aria-label="やり直す">↪️<small>進む</small></button>
+    <div class="spacer"></div>
+    <button class="tool-btn" id="btn-clear" aria-label="キャンバスを全消去">✨<small>全消去</small></button>
+    <div class="spacer"></div>
+    <button class="tool-btn" id="btn-trash" aria-label="このメモを削除">🗑️<small>削除</small></button>
+  </div>
+
+  <div class="editor-bar bottom">
+    <button class="tool-btn selected" id="btn-pen" aria-label="ペン">🖋️<small>ペン</small></button>
+    <button class="tool-btn" id="btn-eraser" aria-label="消しゴム">🧽<small>消しゴム</small></button>
+    <button class="tool-btn" id="btn-width" aria-label="太さ"><span id="width-dot"></span><small>太さ</small></button>
+    <button class="tool-btn" id="btn-color" aria-label="色"><span id="color-dot"></span><small>色</small></button>
+    <button class="tool-btn" id="btn-bg" aria-label="背景切替"><span id="bg-ind" class="bg-mini bgm-dot"></span><small>背景</small></button>
+  </div>
+
+  <div class="popover" id="pop-width"></div>
+  <div class="popover" id="pop-color"></div>
+  <div class="popover" id="pop-bg"></div>
+</section>
+
+<!-- ============ 3. 設定画面 ============ -->
+<section id="screen-settings" class="screen">
+  <header class="appbar">
+    <button class="back-btn" id="btn-settings-back">◀ 戻る</button>
+    <h1 style="text-align:right; font-size:16px;">設定</h1>
+  </header>
+  <div id="settings-body">
+    <div class="setting-group">
+      <h2>1. バックアップ</h2>
+      <button class="setting-btn" id="btn-export">📤 データをエクスポートする</button>
+    </div>
+    <div class="setting-group">
+      <h2>2. 復元</h2>
+      <button class="setting-btn" id="btn-import">📥 データをインポートする</button>
+      <input type="file" id="import-file" accept=".json,application/json" hidden>
+    </div>
+    <div class="setting-group">
+      <h2>3. テーマ切り替え</h2>
+      <div class="theme-toggle">
+        <button id="btn-theme-light">☀️ ライト</button>
+        <button id="btn-theme-dark">🌙 ダーク</button>
+      </div>
+      <p id="settings-note">※ 書き心地を保つため、キャンバスの紙面はどちらのモードでも明るい色のままです。</p>
+    </div>
+    <div class="setting-group">
+      <h2>4. データ全消去</h2>
+      <button class="setting-btn danger" id="btn-wipe">⚠️ 全データを削除する</button>
+      <p class="setting-note">保存先：ブラウザ内データベース（IndexedDB）。容量の上限を気にせず保存できます。</p>
+    </div>
+    <div class="setting-group">
+      <h2>5. アプリ情報</h2>
+      <p class="setting-note">てがきメモ v<span id="app-version-label"></span>（PWA対応・オフラインでも使用できます）</p>
+    </div>
+  </div>
+</section>
+
+<div id="sheet-overlay" class="sheet-overlay"></div>
+<div id="folder-sheet" class="sheet" role="dialog" aria-label="フォルダを選択">
+  <div class="sheet-handle"></div>
+  <h2 id="folder-sheet-title">フォルダを選択</h2>
+  <div id="folder-sheet-list"></div>
+  <div class="folder-add-row">
+    <input id="new-folder-name" type="text" placeholder="新しいフォルダ名" maxlength="20" autocomplete="off">
+    <button id="btn-add-folder">＋ 作成</button>
+  </div>
+  <button class="sheet-close" id="btn-folder-sheet-close">閉じる</button>
+</div>
+
+<div id="toast" role="status"></div>
+
+<script>
+"use strict";
+/* =====================================================
+ * てがきメモ v5  (tegaki-memo_2026-07-02_v5)
+ * 単一ファイル / バニラJS / IndexedDB永続化
+ * v5: タイトル入力バグ修正（body の user-select:none を
+ *     #canvas-area のみに限定）
+ *     / ピン留め機能（一覧最上部への固定・視覚区分）
+ *     / フォルダ分け機能（IndexedDB folders ストア追加）
+ * v4: IndexedDB完全移行（旧localStorage自動移行）
+ *     / ベース層ビットマップ化＝保存・サムネイル処理をO(1)に
+ *     / Web Share APIによる画像共有（非対応時DLフォールバック)
+ *     / フルスクリーン解除ボタンの視認性改善
+ * ===================================================== */
+
+/* ---------- アプリバージョン（PWA更新管理の一元定数） ---------- */
+const APP_VERSION = "5.0.1";
+
+/* ---------- 定数 ---------- */
+const DB_NAME = "tegaki-db", DB_VER = 2;
+const EDGE_PX = 20;
+const THIN_DIST = 1.4;
+const ZOOM_MIN = 0.5, ZOOM_MAX = 4;
+const GESTURE_GRACE = 200;
+const BQ = 2;   // ベース層（サムネイル・保存用）のノート解像度倍率
+const PEN_WIDTHS = [2.5, 4.5, 8];
+const PEN_COLORS = ["#26221C", "#2F5AA8", "#C4372C", "#1E7A46"];
+const BGS = [
+  { id: "dot",   label: "ドット" },
+  { id: "line",  label: "横線" },
+  { id: "plain", label: "無地" },
+  { id: "grid4", label: "4分割" },
+  { id: "grid9", label: "9分割" }
+];
+
+const $ = (id) => document.getElementById(id);
+
+/* =====================================================
+ * IndexedDB レイヤー（バニラJS直実装）
+ *  - notes   : メタ情報 {id,title,updatedAt,w,h,bg,thumb}
+ *  - strokes : 描画データ {id, strokes:[...]}（分離して一覧を高速化）
+ *  - settings: アプリ設定 {key:"app", ...}
+ * ===================================================== */
+let db = null;
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const rq = indexedDB.open(DB_NAME, DB_VER);
+    rq.onupgradeneeded = (e) => {
+      const d = e.target.result;
+      if (!d.objectStoreNames.contains("notes"))    d.createObjectStore("notes",    { keyPath: "id" });
+      if (!d.objectStoreNames.contains("strokes"))  d.createObjectStore("strokes",  { keyPath: "id" });
+      if (!d.objectStoreNames.contains("settings")) d.createObjectStore("settings", { keyPath: "key" });
+      if (!d.objectStoreNames.contains("folders"))  d.createObjectStore("folders",  { keyPath: "id" });
+    };
+    rq.onsuccess = () => resolve(rq.result);
+    rq.onerror = () => reject(rq.error || new Error("IndexedDBを開けませんでした"));
+    rq.onblocked = () => reject(new Error("IndexedDBが他のタブでロックされています"));
+  });
+}
+function idb(storeName, mode, fn) {
+  return new Promise((resolve, reject) => {
+    if (!db) { reject(new Error("DB未初期化")); return; }
+    let request = null;
+    try {
+      const tx = db.transaction(storeName, mode);
+      const store = tx.objectStore(storeName);
+      request = fn(store) || null;
+      tx.oncomplete = () => resolve(request ? request.result : undefined);
+      tx.onerror = () => reject(tx.error);
+      tx.onabort = () => reject(tx.error || new Error("トランザクション中断"));
+    } catch (e) { reject(e); }
+  });
+}
+const dbGet    = (s, k) => idb(s, "readonly",  st => st.get(k));
+const dbGetAll = (s)    => idb(s, "readonly",  st => st.getAll());
+const dbPut    = (s, v) => idb(s, "readwrite", st => st.put(v));
+const dbDel    = (s, k) => idb(s, "readwrite", st => st.delete(k));
+const dbClear  = (s)    => idb(s, "readwrite", st => st.clear());
+
+/* ---- 旧localStorage（v1〜v3）からの自動マイグレーション ---- */
+async function migrateFromLocalStorage() {
+  let raw = null;
+  try { raw = localStorage.getItem("tegaki.meta"); } catch { return; }
+  if (!raw) return;
+  try {
+    const oldMeta = JSON.parse(raw) || [];
+    for (const n of oldMeta) {
+      if (!n.id) continue;
+      if (!n.bg) n.bg = "dot";
+      if (typeof n.isPinned !== "boolean") n.isPinned = false;
+      if (!("folderId" in n)) n.folderId = null;
+      let strokes = [];
+      try { strokes = JSON.parse(localStorage.getItem("tegaki.note." + n.id) || "[]"); } catch {}
+      await dbPut("notes", n);
+      await dbPut("strokes", { id: n.id, strokes });
+    }
+    try {
+      const oldSet = JSON.parse(localStorage.getItem("tegaki.settings") || "null");
+      if (oldSet) await dbPut("settings", Object.assign({ key: "app" }, oldSet));
+    } catch {}
+    // 移行成功後にのみ旧データを削除
+    for (const n of oldMeta) { try { localStorage.removeItem("tegaki.note." + n.id); } catch {} }
+    try { localStorage.removeItem("tegaki.meta"); localStorage.removeItem("tegaki.settings"); } catch {}
+    if (oldMeta.length) toast(`${oldMeta.length}件のメモを新しいデータベースへ移行しました`);
+  } catch (e) {
+    console.error("migration failed:", e);
+    toast("旧データの移行に失敗しました（旧データは残っています）");
+  }
+}
+
+/* ---------- アプリ状態 ---------- */
+let meta = [];
+let folders = [];   // ユーザー作成フォルダ {id, name, createdAt}（"すべてのメモ"は id:null の仮想フォルダ）
+let currentFolderId = null;   // 一覧画面で選択中のフォルダ（null＝すべてのメモ）
+let settings = { theme: "light", tool: "pen", widthIdx: 1, colorIdx: 0 };
+let cur = null;
+let saveTimer = null;
+let dbReady = false;
+let folderSheetMode = "filter";   // "filter"＝一覧の絞り込み / "assign"＝メモへのフォルダ割り当て
+
+function saveSettings() {
+  if (!dbReady) return;
+  dbPut("settings", Object.assign({ key: "app" }, settings)).catch(e => console.error(e));
+}
+
+/* =====================================================
+ * 画面遷移（History API ＝ スマホの戻るボタン対応）
+ * ===================================================== */
+const screens = { list: $("screen-list"), editor: $("screen-editor"), settings: $("screen-settings") };
+
+function showScreen(name) {
+  for (const k in screens) screens[k].classList.toggle("active", k === name);
+  closePopovers();
+  closeFolderSheet();
+}
+function navigate(name, id) {
+  history.pushState({ screen: name, id: id || null }, "");
+  enterScreen(name, id);
+}
+function enterScreen(name, id) {
+  if (screens.editor.classList.contains("active") && name !== "editor") leaveEditor();
+  if (name === "editor" && id) openEditor(id).catch(e => { console.error(e); toast("メモを開けませんでした"); history.back(); });
+  if (name === "list") renderList();
+  showScreen(name);
+}
+window.addEventListener("popstate", (e) => {
+  const s = e.state || { screen: "list" };
+  enterScreen(s.screen, s.id);
+});
+history.replaceState({ screen: "list" }, "");
+
+$("btn-settings").addEventListener("click", () => navigate("settings"));
+$("btn-settings-back").addEventListener("click", () => history.back());
+$("btn-editor-back").addEventListener("click", () => history.back());
+
+/* =====================================================
+ * メモ一覧画面
+ * ===================================================== */
+function relTime(t) {
+  const d = Date.now() - t;
+  const m = Math.floor(d / 60000);
+  if (m < 1) return "たった今";
+  if (m < 60) return m + "分前";
+  const h = Math.floor(m / 60);
+  if (h < 24) return h + "時間前";
+  const days = Math.floor(h / 24);
+  if (days < 30) return days + "日前";
+  return new Date(t).toLocaleDateString("ja-JP");
+}
+
+function folderName(id) {
+  if (id === null || id === undefined) return "すべてのメモ";
+  const f = folders.find(f => f.id === id);
+  return f ? f.name : "すべてのメモ";
+}
+function updateFolderBar() {
+  $("folder-bar-label").textContent = folderName(currentFolderId);
+}
+function makeNoteCard(n) {
+  const card = document.createElement("button");
+  card.className = "note-card" + (n.isPinned ? " pinned" : "");
+  const img = document.createElement("img");
+  img.className = "thumb"; img.alt = ""; img.loading = "lazy";
+  if (n.thumb) img.src = n.thumb; else img.style.display = "none";
+  const info = document.createElement("div");
+  info.className = "info";
+  const title = document.createElement("span");
+  title.className = "title";
+  if (n.isPinned) {
+    const pin = document.createElement("span");
+    pin.className = "pin-mark"; pin.textContent = "📌";
+    title.appendChild(pin);
+  }
+  const titleText = document.createElement("span");
+  titleText.className = "title-text"; titleText.textContent = n.title;
+  title.appendChild(titleText);
+  const time = document.createElement("span");
+  time.className = "time"; time.textContent = "最終更新: " + relTime(n.updatedAt);
+  info.append(title, time);
+  card.append(img, info);
+  card.addEventListener("click", () => navigate("editor", n.id));
+  return card;
+}
+function renderList() {
+  updateFolderBar();
+  const q = $("search").value.trim().toLowerCase();
+  const list = $("note-list");
+  list.innerHTML = "";
+  const items = meta
+    .filter(n => currentFolderId === null || n.folderId === currentFolderId)
+    .filter(n => !q || (n.title || "").toLowerCase().includes(q));
+
+  if (!items.length) {
+    const d = document.createElement("div");
+    d.id = "empty-state";
+    d.textContent = !dbReady ? "読み込み中…"
+      : q ? "「" + $("search").value + "」に一致するメモはありません。"
+          : currentFolderId !== null ? "このフォルダにはまだメモがありません。"
+          : "まだメモがありません。右下の「＋ 新規メモ」から書き始められます。";
+    list.appendChild(d);
+    return;
+  }
+
+  const pinned = items.filter(n => n.isPinned).sort((a, b) => b.updatedAt - a.updatedAt);
+  const rest = items.filter(n => !n.isPinned).sort((a, b) => b.updatedAt - a.updatedAt);
+
+  if (pinned.length) {
+    const h = document.createElement("div");
+    h.className = "section-header pinned-header";
+    h.textContent = "📌 ピン留め";
+    list.appendChild(h);
+    for (const n of pinned) list.appendChild(makeNoteCard(n));
+    if (rest.length) {
+      const h2 = document.createElement("div");
+      h2.className = "section-header";
+      h2.textContent = "その他のメモ";
+      list.appendChild(h2);
+    }
+  }
+  for (const n of rest) list.appendChild(makeNoteCard(n));
+}
+$("search").addEventListener("input", renderList);
+
+$("fab").addEventListener("click", async () => {
+  if (!dbReady) { toast("準備中です。少し待ってからお試しください。"); return; }
+  const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  const d = new Date();
+  const note = {
+    id,
+    title: "メモ " + (d.getMonth() + 1) + "/" + d.getDate() + " " +
+           d.getHours() + ":" + String(d.getMinutes()).padStart(2, "0"),
+    updatedAt: Date.now(),
+    w: 0, h: 0, thumb: "", bg: "dot",
+    isPinned: false,
+    folderId: currentFolderId   // 一覧で選択中のフォルダの中に作成される
+  };
+  try {
+    await dbPut("notes", note);
+    await dbPut("strokes", { id, strokes: [] });
+    meta.push(note);
+    navigate("editor", id);
+  } catch (e) {
+    console.error(e);
+    toast("メモを作成できませんでした");
+  }
+});
+
+/* =====================================================
+ * 手書きエンジン（編集画面）
+ * ===================================================== */
+const canvas = $("canvas");
+const ctx = canvas.getContext("2d");
+const off = document.createElement("canvas");    // 画面表示用の確定層（現在ズームでシャープ）
+const offCtx = off.getContext("2d");
+const base = document.createElement("canvas");   // ノート解像度の常設ベース層（サムネ・保存用 / O(1)）
+const baseCtx = base.getContext("2d");
+let scale = 1, dpr = 1;
+
+let view = { z: 1, tx: 0, ty: 0 };
+let viewAtOff = { z: 1, tx: 0, ty: 0 };
+let paperColor = "#FDFCF9";
+let thumbDirty = true;
+
+function viewIsCommitted() {
+  return view.z === viewAtOff.z && view.tx === viewAtOff.tx && view.ty === viewAtOff.ty;
+}
+function clampViewPan() {
+  view.z = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, view.z));
+  const vw = canvas.width / dpr, vh = canvas.height / dpr;
+  const W = cur.note.w * scale * view.z, H = cur.note.h * scale * view.z;
+  const loX = Math.min(0, vw - W), hiX = Math.max(0, vw - W);
+  const loY = Math.min(0, vh - H), hiY = Math.max(0, vh - H);
+  view.tx = Math.min(hiX, Math.max(loX, view.tx));
+  view.ty = Math.min(hiY, Math.max(loY, view.ty));
+}
+function setViewTransform(c, v) {
+  const k = dpr * scale * v.z;
+  c.setTransform(k, 0, 0, k, dpr * v.tx, dpr * v.ty);
+  c.lineCap = "round";
+  c.lineJoin = "round";
+}
+
+async function openEditor(id) {
+  const note = meta.find(n => n.id === id);
+  if (!note) { history.back(); return; }
+  if (!note.bg) note.bg = "dot";
+  if (typeof note.isPinned !== "boolean") note.isPinned = false;
+  if (!("folderId" in note)) note.folderId = null;
+  let strokes = [];
+  try {
+    const rec = await dbGet("strokes", id);
+    strokes = (rec && Array.isArray(rec.strokes)) ? rec.strokes : [];
+  } catch (e) { console.error(e); toast("描画データの読み込みに失敗しました"); }
+  cur = { id, note, strokes, redo: [] };
+  view = { z: 1, tx: 0, ty: 0 };
+  thumbDirty = false;
+  setFullscreen(false, true);
+  $("editor-title").value = note.title;
+  applyBg(note.bg);
+  updatePinButton();
+  updateNoteFolderLabel();
+  setStatus("保存済み ✓", false, true);
+  requestAnimationFrame(() => {
+    if (!cur || cur.id !== id) return;
+    layoutCanvas(); rebuildBase(); redrawAll(); updateButtons();
+  });
+}
+
+function leaveEditor() {
+  if (!cur) return;
+  flushSave();
+  setFullscreen(false, true);
+  cur = null;
+}
+
+function layoutCanvas() {
+  if (!cur) return;
+  const frame = $("canvas-frame");
+  const rect = frame.getBoundingClientRect();
+  if (rect.width < 10) return;
+  if (!cur.note.w) { cur.note.w = Math.round(rect.width); cur.note.h = Math.round(rect.height); }
+  dpr = Math.min(window.devicePixelRatio || 1, 3);
+  scale = rect.width / cur.note.w;
+  canvas.width = Math.round(rect.width * dpr);
+  canvas.height = Math.round(rect.height * dpr);
+  off.width = canvas.width;
+  off.height = canvas.height;
+  if (base.width !== cur.note.w * BQ) {
+    base.width = cur.note.w * BQ;
+    base.height = cur.note.h * BQ;
+  }
+  patternsDirty = true;
+  clampViewPan();
+}
+window.addEventListener("resize", () => {
+  if (cur && screens.editor.classList.contains("active")) {
+    const needBase = base.width !== cur.note.w * BQ;
+    layoutCanvas();
+    if (needBase) rebuildBase();
+    redrawAll();
+  }
+});
+
+/* ---- 全消去マーカー {m:"x"} 以降のストロークだけが「見えている」内容 ---- */
+function visibleStrokes(arr) {
+  let last = -1;
+  for (let i = arr.length - 1; i >= 0; i--) {
+    if (arr[i].m === "x") { last = i; break; }
+  }
+  return arr.slice(last + 1);
+}
+
+/* ---- ストローク描画（中点ベジェで滑らかに） ---- */
+function traceStroke(c, s) {
+  const p = s.p;
+  c.strokeStyle = s.c;
+  c.fillStyle = s.c;
+  c.lineWidth = s.w;
+  c.globalCompositeOperation = s.m === "e" ? "destination-out" : "source-over";
+  if (p.length <= 2) {
+    c.beginPath();
+    c.arc(p[0], p[1], s.w / 2, 0, Math.PI * 2);
+    c.fill();
+  } else {
+    c.beginPath();
+    c.moveTo(p[0], p[1]);
+    let i = 2;
+    for (; i < p.length - 2; i += 2) {
+      c.quadraticCurveTo(p[i], p[i + 1], (p[i] + p[i + 2]) / 2, (p[i + 1] + p[i + 3]) / 2);
+    }
+    c.lineTo(p[i], p[i + 1]);
+    c.stroke();
+  }
+  c.globalCompositeOperation = "source-over";
+}
+
+/* ---- ベース層（ノート解像度・ビュー非依存）：ストローク確定時に焼き付け ---- */
+function setBaseTransform() {
+  baseCtx.setTransform(BQ, 0, 0, BQ, 0, 0);
+  baseCtx.lineCap = "round";
+  baseCtx.lineJoin = "round";
+}
+function rebuildBase() {
+  baseCtx.save(); baseCtx.setTransform(1, 0, 0, 1, 0, 0);
+  baseCtx.clearRect(0, 0, base.width, base.height); baseCtx.restore();
+  setBaseTransform();
+  for (const s of visibleStrokes(cur.strokes)) traceStroke(baseCtx, s);
+}
+
+/* ---- 背景テンプレート（画面用：パターンでズーム追従） ---- */
+let patDot = null, patLine = null, patternsDirty = true;
+function buildPatterns() {
+  if (!patternsDirty) return;
+  const R = 4;
+  const dTile = document.createElement("canvas");
+  dTile.width = 22 * R; dTile.height = 22 * R;
+  const dc = dTile.getContext("2d");
+  dc.fillStyle = "rgba(38,34,28,.12)";
+  dc.beginPath(); dc.arc(11 * R, 11 * R, 1 * R, 0, Math.PI * 2); dc.fill();
+  patDot = ctx.createPattern(dTile, "repeat");
+
+  const lTile = document.createElement("canvas");
+  lTile.width = 8 * R; lTile.height = 28 * R;
+  const lc = lTile.getContext("2d");
+  lc.fillStyle = "rgba(38,34,28,.13)";
+  lc.fillRect(0, 27 * R, 8 * R, 1 * R);
+  patLine = ctx.createPattern(lTile, "repeat");
+
+  try {
+    const m = new DOMMatrix().scale(1 / R);
+    patDot.setTransform(m);
+    patLine.setTransform(m);
+  } catch (e) { /* 未対応環境では等倍タイルとして機能 */ }
+  patternsDirty = false;
+}
+function drawTemplateLive(c) {
+  const w = cur.note.w, h = cur.note.h, bg = cur.note.bg;
+  if (bg === "plain") return;
+  buildPatterns();
+  if (bg === "dot" && patDot) { c.fillStyle = patDot; c.fillRect(0, 0, w, h); return; }
+  if (bg === "line" && patLine) { c.fillStyle = patLine; c.fillRect(0, 0, w, h); return; }
+  if (bg === "grid4" || bg === "grid9") {
+    c.strokeStyle = "rgba(38,34,28,.18)";
+    c.lineWidth = 2 / (scale * view.z);
+    const div = bg === "grid4" ? 2 : 3;
+    for (let i = 1; i < div; i++) {
+      c.beginPath(); c.moveTo(w * i / div, 0); c.lineTo(w * i / div, h); c.stroke();
+      c.beginPath(); c.moveTo(0, h * i / div); c.lineTo(w, h * i / div); c.stroke();
+    }
+  }
+}
+
+/* ---- 画面合成：紙→テンプレート→ストローク層 ---- */
+function render() {
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.restore();
+
+  setViewTransform(ctx, view);
+  ctx.fillStyle = paperColor;
+  ctx.fillRect(0, 0, cur.note.w, cur.note.h);
+  drawTemplateLive(ctx);
+  ctx.strokeStyle = "rgba(38,34,28,.08)";
+  ctx.lineWidth = 1 / (scale * view.z);
+  ctx.strokeRect(0, 0, cur.note.w, cur.note.h);
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(0, 0, cur.note.w, cur.note.h);
+  ctx.clip();
+  if (viewIsCommitted()) {
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.drawImage(off, 0, 0);
+  } else {
+    const k = view.z / viewAtOff.z;
+    ctx.setTransform(dpr * k, 0, 0, dpr * k,
+                     dpr * (view.tx - viewAtOff.tx * k),
+                     dpr * (view.ty - viewAtOff.ty * k));
+    ctx.drawImage(off, 0, 0, off.width / dpr, off.height / dpr);
+  }
+  ctx.restore();
+  setViewTransform(ctx, view);
+  updateZoomChip();
+}
+
+function redrawAll() {
+  offCtx.save(); offCtx.setTransform(1, 0, 0, 1, 0, 0);
+  offCtx.clearRect(0, 0, off.width, off.height); offCtx.restore();
+  setViewTransform(offCtx, view);
+  for (const s of visibleStrokes(cur.strokes)) traceStroke(offCtx, s);
+  viewAtOff = { ...view };
+  render();
+}
+function commitView() {
+  clampViewPan();
+  redrawAll();
+}
+
+/* ---- ズームチップ ---- */
+function updateZoomChip() {
+  const chip = $("zoom-chip");
+  const isDefault = Math.abs(view.z - 1) < 0.01 && Math.abs(view.tx) < 1 && Math.abs(view.ty) < 1;
+  chip.classList.toggle("show", !isDefault);
+  if (!isDefault) chip.textContent = Math.round(view.z * 100) + "% ⟲";
+}
+$("zoom-chip").addEventListener("click", () => {
+  view = { z: 1, tx: 0, ty: 0 };
+  commitView();
+});
+
+/* =====================================================
+ * 入力処理（描画 / ピンチズーム / パームリジェクション）
+ * ===================================================== */
+const pointers = new Map();
+let activeId = null;
+let activeType = null;
+let penSeen = false;
+let live = null;
+let lastMid = null;
+let strokeStartT = 0;
+let gesture = null;
+let lastTwoFingerTap = 0;
+
+function touchIds() {
+  const out = [];
+  for (const [id, p] of pointers) if (p.type === "touch") out.push(id);
+  return out;
+}
+function toNote(e) {
+  const r = canvas.getBoundingClientRect();
+  let x = (e.clientX - r.left - view.tx) / (scale * view.z);
+  let y = (e.clientY - r.top - view.ty) / (scale * view.z);
+  x = Math.min(cur.note.w, Math.max(0, x));
+  y = Math.min(cur.note.h, Math.max(0, y));
+  return [Math.round(x * 10) / 10, Math.round(y * 10) / 10];
+}
+function cancelLive() {
+  live = null; lastMid = null;
+  activeId = null; activeType = null;
+  render();
+}
+function startStroke(e) {
+  activeId = e.pointerId;
+  activeType = e.pointerType;
+  strokeStartT = performance.now();
+  document.activeElement && document.activeElement.blur();
+  const isEraser = settings.tool === "eraser";
+  const w = PEN_WIDTHS[settings.widthIdx] * (isEraser ? 4 : 1);
+  live = { m: isEraser ? "e" : "d", c: PEN_COLORS[settings.colorIdx], w, p: toNote(e) };
+  lastMid = null;
+  setViewTransform(ctx, view);
+}
+
+/* ---- ピンチジェスチャー ---- */
+function startGesture() {
+  const ids = touchIds().slice(0, 2);
+  if (ids.length < 2) return;
+  const p1 = pointers.get(ids[0]), p2 = pointers.get(ids[1]);
+  gesture = {
+    ids,
+    d0: Math.hypot(p2.x - p1.x, p2.y - p1.y) || 1,
+    cx0: (p1.x + p2.x) / 2, cy0: (p1.y + p2.y) / 2,
+    view0: { ...view },
+    t0: performance.now(),
+    maxMove: 0
+  };
+}
+function updateGesture() {
+  const p1 = pointers.get(gesture.ids[0]), p2 = pointers.get(gesture.ids[1]);
+  if (!p1 || !p2) return;
+  const d = Math.hypot(p2.x - p1.x, p2.y - p1.y) || 1;
+  const cx = (p1.x + p2.x) / 2, cy = (p1.y + p2.y) / 2;
+  gesture.maxMove = Math.max(gesture.maxMove,
+    Math.hypot(cx - gesture.cx0, cy - gesture.cy0) + Math.abs(d - gesture.d0));
+
+  const r = canvas.getBoundingClientRect();
+  const v0 = gesture.view0;
+  let z = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, v0.z * d / gesture.d0));
+  const k = z / v0.z;
+  view.z = z;
+  view.tx = (cx - r.left) - ((gesture.cx0 - r.left) - v0.tx) * k;
+  view.ty = (cy - r.top)  - ((gesture.cy0 - r.top)  - v0.ty) * k;
+  clampViewPan();
+  render();
+}
+function endGesture() {
+  if (!gesture) return;
+  const now = performance.now();
+  const dt = now - gesture.t0;
+  if (dt < 250 && gesture.maxMove < 12) {
+    view = { ...gesture.view0 };
+    if (now - lastTwoFingerTap < 400) {
+      lastTwoFingerTap = 0;
+      toggleFullscreen();
+    } else {
+      lastTwoFingerTap = now;
+    }
+  }
+  gesture = null;
+  commitView();
+}
+
+/* ---- Pointer Events ---- */
+canvas.addEventListener("pointerdown", (e) => {
+  if (e.clientX < EDGE_PX || e.clientX > window.innerWidth - EDGE_PX) return;
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY, type: e.pointerType });
+  canvas.setPointerCapture(e.pointerId);
+  if (e.pointerType === "pen") penSeen = true;
+
+  if (e.pointerType === "touch") {
+    if (gesture) { e.preventDefault(); return; }
+    const ids = touchIds();
+    if (ids.length === 2) {
+      if (live && activeType === "pen") { e.preventDefault(); return; }
+      if (live && activeType === "touch") {
+        if (performance.now() - strokeStartT < GESTURE_GRACE) {
+          cancelLive();
+          startGesture();
+        }
+        e.preventDefault(); return;
+      }
+      startGesture();
+      e.preventDefault(); return;
+    }
+    if (ids.length > 2) { e.preventDefault(); return; }
+    if (penSeen) { e.preventDefault(); return; }
+    if (activeId !== null) { e.preventDefault(); return; }
+    startStroke(e);
+    e.preventDefault(); return;
+  }
+
+  if (gesture) { gesture = null; commitView(); }
+  if (activeId !== null && activeType === "touch") cancelLive();
+  else if (activeId !== null) { e.preventDefault(); return; }
+  startStroke(e);
+  e.preventDefault();
+}, { passive: false });
+
+canvas.addEventListener("pointermove", (e) => {
+  const rec = pointers.get(e.pointerId);
+  if (rec) { rec.x = e.clientX; rec.y = e.clientY; }
+
+  if (gesture && e.pointerType === "touch" && gesture.ids.includes(e.pointerId)) {
+    updateGesture();
+    e.preventDefault(); return;
+  }
+  if (e.pointerId !== activeId || !live) return;
+  const events = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+  for (const ev of events) {
+    const [x, y] = toNote(ev);
+    const n = live.p.length;
+    const dx = x - live.p[n - 2], dy = y - live.p[n - 1];
+    if (dx * dx + dy * dy < THIN_DIST * THIN_DIST) continue;
+    live.p.push(x, y);
+    drawLiveSegment();
+  }
+  e.preventDefault();
+}, { passive: false });
+
+function drawLiveSegment() {
+  const p = live.p, n = p.length;
+  if (n < 6) return;
+  const midX = (p[n - 4] + p[n - 2]) / 2, midY = (p[n - 3] + p[n - 1]) / 2;
+  if (live.m === "e") {
+    const c = offCtx;
+    c.strokeStyle = "#000";
+    c.lineWidth = live.w;
+    c.globalCompositeOperation = "destination-out";
+    c.beginPath();
+    if (lastMid) c.moveTo(lastMid[0], lastMid[1]); else c.moveTo(p[0], p[1]);
+    c.quadraticCurveTo(p[n - 4], p[n - 3], midX, midY);
+    c.stroke();
+    c.globalCompositeOperation = "source-over";
+    lastMid = [midX, midY];
+    render();
+    return;
+  }
+  ctx.strokeStyle = live.c;
+  ctx.lineWidth = live.w;
+  ctx.beginPath();
+  if (lastMid) ctx.moveTo(lastMid[0], lastMid[1]);
+  else ctx.moveTo(p[0], p[1]);
+  ctx.quadraticCurveTo(p[n - 4], p[n - 3], midX, midY);
+  ctx.stroke();
+  lastMid = [midX, midY];
+}
+
+function endStroke(e) {
+  if (e.pointerId !== activeId) return;
+  activeId = null; activeType = null;
+  if (!live) return;
+  cur.strokes.push(live);
+  cur.redo = [];
+  traceStroke(offCtx, live);   // 表示用確定層へ（消しゴムは冪等なので二重適用でも安全）
+  setBaseTransform();
+  traceStroke(baseCtx, live);  // ベース層へも焼き付け＝保存・サムネはビットマップ参照のみ
+  render();
+  live = null; lastMid = null;
+  thumbDirty = true;
+  updateButtons();
+  scheduleSave();
+}
+canvas.addEventListener("pointerup", (e) => {
+  pointers.delete(e.pointerId);
+  if (gesture && gesture.ids.includes(e.pointerId)) { endGesture(); return; }
+  endStroke(e);
+});
+canvas.addEventListener("pointercancel", (e) => {
+  pointers.delete(e.pointerId);
+  if (gesture && gesture.ids.includes(e.pointerId)) { gesture = null; commitView(); return; }
+  if (e.pointerId !== activeId) return;
+  activeId = null; activeType = null; live = null; lastMid = null;
+  render();
+});
+
+/* =====================================================
+ * フルスクリーン（没入モード）
+ * ===================================================== */
+let isFullscreen = false;
+function setFullscreen(on, instant) {
+  isFullscreen = on;
+  const ed = screens.editor;
+  if (on) {
+    ed.classList.add("fs-anim");
+    const apply = () => {
+      ed.classList.add("fullscreen");
+      layoutCanvas();
+      if (cur) redrawAll();
+    };
+    instant ? apply() : setTimeout(apply, 190);
+  } else {
+    ed.classList.remove("fullscreen");
+    requestAnimationFrame(() => ed.classList.remove("fs-anim"));
+    layoutCanvas();
+    if (cur && screens.editor.classList.contains("active")) redrawAll();
+  }
+}
+function toggleFullscreen() { setFullscreen(!isFullscreen); }
+$("btn-fs").addEventListener("click", () => toggleFullscreen());
+$("btn-fs-exit").addEventListener("click", () => setFullscreen(false));
+
+/* ---- Undo / Redo / 全消去 / メモ削除 ---- */
+function updateButtons() {
+  if (!cur) return;
+  $("btn-undo").disabled = !cur.strokes.length;
+  $("btn-redo").disabled = !cur.redo.length;
+  $("btn-clear").disabled = !visibleStrokes(cur.strokes).length;
+}
+function afterHistoryChange() {
+  rebuildBase();
+  redrawAll();
+  thumbDirty = true;
+  updateButtons();
+  scheduleSave();
+}
+$("btn-undo").addEventListener("click", () => {
+  if (!cur.strokes.length) return;
+  cur.redo.push(cur.strokes.pop());
+  afterHistoryChange();
+});
+$("btn-redo").addEventListener("click", () => {
+  if (!cur.redo.length) return;
+  cur.strokes.push(cur.redo.pop());
+  afterHistoryChange();
+});
+$("btn-clear").addEventListener("click", () => {
+  if (!visibleStrokes(cur.strokes).length) return;
+  if (!confirm("キャンバスをすべて消去しますか？\n（「↩️戻す」で元に戻せます）")) return;
+  cur.strokes.push({ m: "x" });
+  cur.redo = [];
+  afterHistoryChange();
+  toast("全消去しました（戻すで復元できます）");
+});
+$("btn-trash").addEventListener("click", async () => {
+  if (!confirm("このメモを削除しますか？\nこの操作は元に戻せません。")) return;
+  const id = cur.id;
+  clearTimeout(saveTimer); saveTimer = null;
+  cur = null;
+  try {
+    await dbDel("notes", id);
+    await dbDel("strokes", id);
+    meta = meta.filter(n => n.id !== id);
+    toast("メモを削除しました");
+  } catch (e) {
+    console.error(e);
+    toast("削除に失敗しました");
+  }
+  history.back();
+});
+
+/* ---- タイトルの直接入力 ---- */
+const titleInput = $("editor-title");
+titleInput.addEventListener("input", () => {
+  if (!cur) return;
+  cur.note.title = titleInput.value;
+  scheduleSave();
+});
+titleInput.addEventListener("blur", () => {
+  if (!cur) return;
+  const t = titleInput.value.trim();
+  if (!t) {
+    const d = new Date(cur.note.updatedAt || Date.now());
+    cur.note.title = "メモ " + (d.getMonth() + 1) + "/" + d.getDate();
+    titleInput.value = cur.note.title;
+  } else {
+    cur.note.title = t;
+    titleInput.value = t;
+  }
+  scheduleSave();
+});
+titleInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") { e.preventDefault(); titleInput.blur(); }
+});
+
+/* =====================================================
+ * ピン留め機能
+ * ===================================================== */
+function updatePinButton() {
+  if (!cur) return;
+  const on = !!cur.note.isPinned;
+  $("btn-pin").classList.toggle("active", on);
+  $("pin-label").textContent = on ? "ピン留め中" : "ピン留め";
+}
+$("btn-pin").addEventListener("click", () => {
+  if (!cur) return;
+  cur.note.isPinned = !cur.note.isPinned;
+  updatePinButton();
+  scheduleSave();
+  toast(cur.note.isPinned ? "ピン留めしました" : "ピン留めを解除しました");
+});
+
+/* =====================================================
+ * フォルダ分け機能
+ * ===================================================== */
+function updateNoteFolderLabel() {
+  if (!cur) return;
+  $("note-folder-label").textContent = folderName(cur.note.folderId);
+}
+function countInFolder(id) {
+  return meta.filter(n => id === null ? true : n.folderId === id).length;
+}
+function openFolderSheet(mode) {
+  folderSheetMode = mode;
+  $("folder-sheet-title").textContent = mode === "assign" ? "メモをフォルダに入れる" : "フォルダを選択";
+  renderFolderSheet();
+  $("sheet-overlay").classList.add("open");
+  $("folder-sheet").classList.add("open");
+  $("new-folder-name").value = "";
+}
+function closeFolderSheet() {
+  $("sheet-overlay").classList.remove("open");
+  $("folder-sheet").classList.remove("open");
+}
+function renderFolderSheet() {
+  const wrap = $("folder-sheet-list");
+  wrap.innerHTML = "";
+  const selectedId = folderSheetMode === "assign" ? (cur && cur.note.folderId) : currentFolderId;
+  const allList = [{ id: null, name: "すべてのメモ" }, ...folders];
+  for (const f of allList) {
+    const row = document.createElement("div");
+    row.className = "folder-row-outer";
+    row.style.cssText = "display:flex;align-items:center;";
+
+    const btn = document.createElement("button");
+    btn.className = "folder-row" + (f.id === selectedId ? " selected" : "");
+    btn.style.cssText = "flex:1; min-width:0; background:none; border:none;";
+    const icon = document.createElement("span");
+    icon.className = "folder-row-icon"; icon.textContent = f.id === null ? "📁" : "🗂️";
+    const name = document.createElement("span");
+    name.className = "folder-row-name"; name.textContent = f.name;
+    const count = document.createElement("span");
+    count.className = "folder-row-count"; count.textContent = countInFolder(f.id) + "件";
+    btn.append(icon, name, count);
+    btn.addEventListener("click", () => selectFolder(f.id));
+    row.appendChild(btn);
+
+    if (f.id !== null) {
+      const del = document.createElement("button");
+      del.className = "folder-row-del"; del.textContent = "🗑️"; del.setAttribute("aria-label", "フォルダを削除");
+      del.addEventListener("click", (e) => { e.stopPropagation(); deleteFolder(f.id); });
+      row.appendChild(del);
+    }
+    wrap.appendChild(row);
+  }
+}
+async function selectFolder(id) {
+  if (folderSheetMode === "assign") {
+    if (!cur) { closeFolderSheet(); return; }
+    cur.note.folderId = id;
+    updateNoteFolderLabel();
+    scheduleSave();
+  } else {
+    currentFolderId = id;
+    settings.currentFolderId = id;
+    saveSettings();
+    renderList();
+  }
+  closeFolderSheet();
+}
+async function addFolder(name) {
+  const t = name.trim();
+  if (!t) return;
+  if (folders.some(f => f.name === t)) { toast("同じ名前のフォルダがあります"); return; }
+  const f = { id: "f_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name: t, createdAt: Date.now() };
+  try {
+    await dbPut("folders", f);
+    folders.push(f);
+    renderFolderSheet();
+    $("new-folder-name").value = "";
+    toast(`フォルダ「${t}」を作成しました`);
+  } catch (e) {
+    console.error(e); toast("フォルダの作成に失敗しました");
+  }
+}
+async function deleteFolder(id) {
+  const f = folders.find(x => x.id === id);
+  if (!f) return;
+  if (!confirm(`フォルダ「${f.name}」を削除しますか？\n（中のメモは「すべてのメモ」に残ります）`)) return;
+  try {
+    const affected = meta.filter(n => n.folderId === id);
+    for (const n of affected) { n.folderId = null; await dbPut("notes", Object.assign({}, n)); }
+    await dbDel("folders", id);
+    folders = folders.filter(x => x.id !== id);
+    if (currentFolderId === id) { currentFolderId = null; settings.currentFolderId = null; saveSettings(); }
+    if (cur && cur.note.folderId === id) { cur.note.folderId = null; updateNoteFolderLabel(); }
+    renderFolderSheet();
+    renderList();
+    toast(`フォルダ「${f.name}」を削除しました`);
+  } catch (e) {
+    console.error(e); toast("フォルダの削除に失敗しました");
+  }
+}
+$("btn-folder-switch").addEventListener("click", () => openFolderSheet("filter"));
+$("btn-note-folder").addEventListener("click", () => openFolderSheet("assign"));
+$("btn-folder-sheet-close").addEventListener("click", closeFolderSheet);
+$("sheet-overlay").addEventListener("click", closeFolderSheet);
+$("btn-add-folder").addEventListener("click", () => addFolder($("new-folder-name").value));
+$("new-folder-name").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") { e.preventDefault(); addFolder($("new-folder-name").value); }
+});
+
+/* ---- 画像として保存・共有（Web Share API＋DLフォールバック） ---- */
+function drawTemplateStatic(c, w, h, bg) {
+  c.save();
+  if (bg === "dot") {
+    c.fillStyle = "rgba(38,34,28,.12)";
+    for (let y = 11; y < h; y += 22)
+      for (let x = 11; x < w; x += 22) {
+        c.beginPath(); c.arc(x, y, 1, 0, Math.PI * 2); c.fill();
+      }
+  } else if (bg === "line") {
+    c.strokeStyle = "rgba(38,34,28,.13)"; c.lineWidth = 1;
+    for (let y = 28; y < h; y += 28) {
+      c.beginPath(); c.moveTo(0, y); c.lineTo(w, y); c.stroke();
+    }
+  } else if (bg === "grid4" || bg === "grid9") {
+    c.strokeStyle = "rgba(38,34,28,.18)"; c.lineWidth = 2;
+    const div = bg === "grid4" ? 2 : 3;
+    for (let i = 1; i < div; i++) {
+      c.beginPath(); c.moveTo(w * i / div, 0); c.lineTo(w * i / div, h); c.stroke();
+      c.beginPath(); c.moveTo(0, h * i / div); c.lineTo(w, h * i / div); c.stroke();
+    }
+  }
+  c.restore();
+}
+function buildExportCanvas() {
+  const s = 2;
+  const out = document.createElement("canvas");
+  out.width = cur.note.w * s;
+  out.height = cur.note.h * s;
+  const c = out.getContext("2d");
+  c.setTransform(s, 0, 0, s, 0, 0);
+  c.fillStyle = "#FFFFFF";
+  c.fillRect(0, 0, cur.note.w, cur.note.h);
+  drawTemplateStatic(c, cur.note.w, cur.note.h, cur.note.bg);
+  // ストロークはベース層のビットマップから合成（ループ不要）
+  c.drawImage(base, 0, 0, base.width, base.height, 0, 0, cur.note.w, cur.note.h);
+  return out;
+}
+$("btn-save-image").addEventListener("click", async () => {
+  if (!cur) return;
+  flushSave();
+  try {
+    const out = buildExportCanvas();
+    const blob = await new Promise((res) => out.toBlob(res, "image/png"));
+    if (!blob) throw new Error("画像の生成に失敗しました");
+    const d = new Date();
+    const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    const safeTitle = (cur.note.title || "memo").replace(/[\\/:*?"<>|\s]+/g, "_").slice(0, 30);
+    const fileName = `${safeTitle}_${dateStr}.png`;
+    const file = new File([blob], fileName, { type: "image/png" });
+
+    // Web Share API：スマホ標準の共有メニュー（写真に保存 / LINEで送る 等）
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file], title: cur.note.title });
+        return;
+      } catch (e) {
+        if (e && e.name === "AbortError") return;   // ユーザーがキャンセル
+        // 共有に失敗した場合はダウンロードへフォールバック
+      }
+    }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.download = fileName;
+    a.href = url;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+    toast("画像を保存しました");
+  } catch (e) {
+    console.error(e);
+    toast("画像の保存に失敗しました");
+  }
+});
+
+/* ---- 自動保存（デバウンス＋離脱時フラッシュ / IndexedDB非同期） ---- */
+let chipTimer = null;
+let savingBusy = false, savePending = false;
+function setStatus(text, saving, instantHide) {
+  const el = $("save-chip");
+  el.textContent = text;
+  el.classList.toggle("saving", !!saving);
+  el.classList.add("show");
+  clearTimeout(chipTimer);
+  if (!saving) chipTimer = setTimeout(() => el.classList.remove("show"), instantHide ? 0 : 1400);
+}
+function scheduleSave() {
+  if (!cur) return;
+  setStatus("保存中…", true);
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(flushSave, 350);
+}
+async function flushSave() {
+  clearTimeout(saveTimer); saveTimer = null;
+  if (!cur || !dbReady) return;
+  if (savingBusy) { savePending = true; return; }
+  savingBusy = true;
+  const snapshot = cur;   // 保存中に画面遷移してもこのメモを確実に書き込む
+  try {
+    snapshot.note.updatedAt = Date.now();
+    if (thumbDirty) {
+      snapshot.note.thumb = makeThumb();
+      thumbDirty = false;
+    }
+    await dbPut("strokes", { id: snapshot.id, strokes: snapshot.strokes });
+    await dbPut("notes", Object.assign({}, snapshot.note));
+    if (cur === snapshot) setStatus("保存済み ✓", false);
+  } catch (e) {
+    console.error(e);
+    if (cur === snapshot) setStatus("保存失敗", false);
+    toast("保存に失敗しました。設定からエクスポートしてバックアップしてください。");
+  } finally {
+    savingBusy = false;
+    if (savePending) { savePending = false; flushSave(); }
+  }
+}
+/* サムネイル：ベース層ビットマップの縮小のみ＝ストローク数に関係なく一定コスト */
+function makeThumb() {
+  const tw = 320;
+  const th = Math.round(tw * (cur.note.h / cur.note.w || 0.6));
+  const t = document.createElement("canvas");
+  t.width = tw; t.height = Math.min(th, 480);
+  const tc = t.getContext("2d");
+  tc.fillStyle = "#FDFCF9";
+  tc.fillRect(0, 0, t.width, t.height);
+  const s = tw / cur.note.w;
+  tc.setTransform(s, 0, 0, s, 0, 0);
+  drawTemplateStatic(tc, cur.note.w, cur.note.h, cur.note.bg);
+  tc.drawImage(base, 0, 0, base.width, base.height, 0, 0, cur.note.w, cur.note.h);
+  return t.toDataURL("image/jpeg", 0.55);
+}
+document.addEventListener("visibilitychange", () => { if (document.hidden) flushSave(); });
+window.addEventListener("pagehide", flushSave);
+
+/* =====================================================
+ * ツールバー（ペン / 消しゴム / 太さ / 色 / 背景）
+ * ===================================================== */
+function setTool(tool) {
+  settings.tool = tool;
+  $("btn-pen").classList.toggle("selected", tool === "pen");
+  $("btn-eraser").classList.toggle("selected", tool === "eraser");
+  saveSettings();
+}
+$("btn-pen").addEventListener("click", () => { setTool("pen"); closePopovers(); });
+$("btn-eraser").addEventListener("click", () => { setTool("eraser"); closePopovers(); });
+
+function refreshToolIndicators() {
+  const d = $("width-dot");
+  const px = 8 + settings.widthIdx * 5;
+  d.style.width = px + "px"; d.style.height = px + "px";
+  $("color-dot").style.background = PEN_COLORS[settings.colorIdx];
+}
+
+function applyBg(bg) {
+  $("bg-ind").className = "bg-mini bgm-" + bg;
+  syncPopSelection();
+  if (cur && screens.editor.classList.contains("active") && canvas.width > 0) render();
+}
+
+function buildPopovers() {
+  const pw = $("pop-width");
+  pw.innerHTML = "";
+  PEN_WIDTHS.forEach((w, i) => {
+    const b = document.createElement("button");
+    b.className = "pop-item";
+    const dot = document.createElement("span");
+    dot.className = "dot";
+    const px = 8 + i * 8;
+    dot.style.cssText = `width:${px}px;height:${px}px`;
+    b.appendChild(dot);
+    b.addEventListener("click", () => {
+      settings.widthIdx = i; saveSettings();
+      refreshToolIndicators(); syncPopSelection(); closePopovers();
+    });
+    pw.appendChild(b);
+  });
+
+  const pc = $("pop-color");
+  pc.innerHTML = "";
+  PEN_COLORS.forEach((c, i) => {
+    const b = document.createElement("button");
+    b.className = "pop-item";
+    const sw = document.createElement("span");
+    sw.className = "swatch";
+    sw.style.background = c;
+    b.appendChild(sw);
+    b.addEventListener("click", () => {
+      settings.colorIdx = i; setTool("pen"); saveSettings();
+      refreshToolIndicators(); syncPopSelection(); closePopovers();
+    });
+    pc.appendChild(b);
+  });
+
+  const pb = $("pop-bg");
+  pb.innerHTML = "";
+  BGS.forEach((bg) => {
+    const b = document.createElement("button");
+    b.className = "pop-item";
+    const mini = document.createElement("span");
+    mini.className = "bg-mini bgm-" + bg.id;
+    const label = document.createElement("small");
+    label.textContent = bg.label;
+    b.append(mini, label);
+    b.addEventListener("click", () => {
+      if (cur) { cur.note.bg = bg.id; thumbDirty = true; scheduleSave(); }
+      applyBg(bg.id);
+      closePopovers();
+    });
+    pb.appendChild(b);
+  });
+  syncPopSelection();
+}
+function syncPopSelection() {
+  [...$("pop-width").children].forEach((el, i) => el.classList.toggle("selected", i === settings.widthIdx));
+  [...$("pop-color").children].forEach((el, i) => el.classList.toggle("selected", i === settings.colorIdx));
+  const curBg = (cur && cur.note.bg) || "dot";
+  [...$("pop-bg").children].forEach((el, i) => el.classList.toggle("selected", BGS[i].id === curBg));
+}
+function togglePopover(pop, anchor) {
+  const wasOpen = pop.classList.contains("open");
+  closePopovers();
+  if (wasOpen) return;
+  pop.classList.add("open");
+  const a = anchor.getBoundingClientRect();
+  const p = pop.getBoundingClientRect();
+  let left = a.left + a.width / 2 - p.width / 2;
+  left = Math.max(8, Math.min(left, window.innerWidth - p.width - 8));
+  pop.style.left = left + "px";
+  pop.style.top = (a.top - p.height - 10) + "px";
+}
+function closePopovers() {
+  $("pop-width").classList.remove("open");
+  $("pop-color").classList.remove("open");
+  $("pop-bg").classList.remove("open");
+}
+$("btn-width").addEventListener("click", (e) => { e.stopPropagation(); togglePopover($("pop-width"), $("btn-width")); });
+$("btn-color").addEventListener("click", (e) => { e.stopPropagation(); togglePopover($("pop-color"), $("btn-color")); });
+$("btn-bg").addEventListener("click", (e) => { e.stopPropagation(); togglePopover($("pop-bg"), $("btn-bg")); });
+document.addEventListener("pointerdown", (e) => {
+  if (!e.target.closest(".popover") && !e.target.closest("#btn-width")
+      && !e.target.closest("#btn-color") && !e.target.closest("#btn-bg")) closePopovers();
+});
+
+/* =====================================================
+ * 設定画面（エクスポート / インポート / テーマ / 全消去）
+ * ===================================================== */
+$("btn-export").addEventListener("click", async () => {
+  if (!dbReady) { toast("準備中です"); return; }
+  try {
+    const notes = await dbGetAll("notes") || [];
+    const folderList = await dbGetAll("folders") || [];
+    const data = { app: "tegaki-memo", version: 5, exportedAt: new Date().toISOString(), meta: notes, folders: folderList, notes: {} };
+    for (const n of notes) {
+      const rec = await dbGet("strokes", n.id);
+      data.notes[n.id] = (rec && rec.strokes) || [];
+    }
+    const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    const d = new Date();
+    a.download = `tegaki-backup_${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}.json`;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    toast("バックアップファイルを書き出しました");
+  } catch (e) {
+    console.error(e);
+    toast("エクスポートに失敗しました");
+  }
+});
+
+$("btn-import").addEventListener("click", () => $("import-file").click());
+$("import-file").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  e.target.value = "";
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async () => {
+    try {
+      const data = JSON.parse(reader.result);
+      if (data.app !== "tegaki-memo" || !Array.isArray(data.meta) || typeof data.notes !== "object") {
+        throw new Error("format");
+      }
+      if (!confirm(`${data.meta.length}件のメモを取り込みます。\n同じIDのメモは上書きされます。よろしいですか？`)) return;
+      if (Array.isArray(data.folders)) {
+        for (const f of data.folders) {
+          if (!f.id || !f.name) continue;
+          await dbPut("folders", f);
+          const fi = folders.findIndex(x => x.id === f.id);
+          if (fi >= 0) folders[fi] = f; else folders.push(f);
+        }
+      }
+      let count = 0;
+      for (const n of data.meta) {
+        if (!n.id) continue;
+        if (!n.bg) n.bg = "dot";
+        if (typeof n.isPinned !== "boolean") n.isPinned = false;
+        if (!("folderId" in n)) n.folderId = null;
+        await dbPut("notes", n);
+        await dbPut("strokes", { id: n.id, strokes: data.notes[n.id] || [] });
+        const i = meta.findIndex(m => m.id === n.id);
+        if (i >= 0) meta[i] = n; else meta.push(n);
+        count++;
+      }
+      renderList();
+      toast(`${count}件のメモを復元しました`);
+    } catch (err) {
+      console.error(err);
+      toast("読み込めませんでした。てがきメモのバックアップファイル（.json）を選択してください。");
+    }
+  };
+  reader.readAsText(file);
+});
+
+function applyTheme(theme) {
+  settings.theme = theme;
+  document.documentElement.dataset.theme = theme;
+  document.querySelector('meta[name="theme-color"]').content = theme === "dark" ? "#17181C" : "#F6F4EF";
+  $("btn-theme-light").classList.toggle("selected", theme === "light");
+  $("btn-theme-dark").classList.toggle("selected", theme === "dark");
+  paperColor = theme === "dark" ? "#ECE9E2" : "#FDFCF9";
+  saveSettings();
+  if (cur && screens.editor.classList.contains("active") && canvas.width > 0) render();
+}
+$("btn-theme-light").addEventListener("click", () => applyTheme("light"));
+$("btn-theme-dark").addEventListener("click", () => applyTheme("dark"));
+
+$("btn-wipe").addEventListener("click", async () => {
+  if (!dbReady) { toast("準備中です"); return; }
+  if (!confirm(`すべてのメモ（${meta.length}件）を完全に削除します。\nこの操作は元に戻せません。\n\n本当に削除しますか？`)) return;
+  try {
+    await dbClear("notes");
+    await dbClear("strokes");
+    await dbClear("folders");
+    meta = [];
+    folders = [];
+    currentFolderId = null;
+    settings.currentFolderId = null;
+    saveSettings();
+    renderList();
+    toast("全データを削除しました");
+  } catch (e) {
+    console.error(e);
+    toast("削除に失敗しました");
+  }
+});
+
+/* ---------- トースト ---------- */
+let toastTimer = null;
+function toast(msg) {
+  const el = $("toast");
+  el.textContent = msg;
+  el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove("show"), 2600);
+}
+
+/* ---------- 起動（非同期ブート） ---------- */
+(async function boot() {
+  setTool(settings.tool);
+  refreshToolIndicators();
+  buildPopovers();
+  try {
+    db = await openDB();
+    await migrateFromLocalStorage();
+    try {
+      const s = await dbGet("settings", "app");
+      if (s) { delete s.key; Object.assign(settings, s); }
+    } catch {}
+    meta = (await dbGetAll("notes")) || [];
+    for (const n of meta) {
+      if (typeof n.isPinned !== "boolean") n.isPinned = false;
+      if (!("folderId" in n)) n.folderId = null;
+    }
+    folders = (await dbGetAll("folders")) || [];
+    if (settings.currentFolderId && folders.some(f => f.id === settings.currentFolderId)) {
+      currentFolderId = settings.currentFolderId;
+    }
+    dbReady = true;
+  } catch (e) {
+    console.error(e);
+    toast("データベースを開けませんでした。プライベートブラウズ中は保存できない場合があります。");
+  }
+  applyTheme(settings.theme);
+  setTool(settings.tool);
+  refreshToolIndicators();
+  renderList();
+  const vLabel = $("app-version-label");
+  if (vLabel) vLabel.textContent = APP_VERSION;
+})();
+
+/* =====================================================
+ * PWA / Service Worker 登録
+ * - APP_VERSION をクエリ付与して登録＝ブラウザのHTTPキャッシュを
+ *   バイパスし、sw.js の内容が変わっていれば確実に更新検知させる
+ * - 新しいSWが有効化(controllerchange)されたら、
+ *   ユーザー操作なしで自動的に画面をリロードする
+ * ===================================================== */
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js?v=" + APP_VERSION)
+      .then((reg) => {
+        // 定期的に更新をチェック（バックグラウンド復帰時などに古いSWのままにならないように）
+        setInterval(() => reg.update().catch(() => {}), 60 * 60 * 1000);
+        document.addEventListener("visibilitychange", () => {
+          if (!document.hidden) reg.update().catch(() => {});
+        });
+      })
+      .catch((e) => console.error("Service Workerの登録に失敗しました:", e));
+  });
+
+  let refreshing = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (refreshing) return;
+    refreshing = true;
+    window.location.reload();
+  });
+}
+</script>
+</body>
+</html>
