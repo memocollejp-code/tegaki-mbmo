@@ -355,6 +355,29 @@
   .theme-toggle button { flex: 1; min-height: 54px; font-size: 15px; font-weight: 600; color: var(--muted); }
   .theme-toggle button.selected { background: var(--accent); color: #fff; }
   #settings-note, .setting-note { font-size: 12px; color: var(--muted); line-height: 1.8; margin-top: 6px; }
+  .setting-toggle {
+    display: flex; align-items: center; gap: 12px; cursor: pointer; user-select: none;
+    padding: 12px 0;
+  }
+  .setting-toggle input[type="checkbox"] {
+    width: 52px; height: 32px; appearance: none; cursor: pointer;
+    background: var(--line); border-radius: 16px; position: relative;
+    transition: background .2s; flex-shrink: 0;
+  }
+  .setting-toggle input[type="checkbox"]:checked {
+    background: var(--accent);
+  }
+  .setting-toggle input[type="checkbox"]::after {
+    content: ""; position: absolute; width: 28px; height: 28px;
+    background: #fff; border-radius: 14px; top: 2px; left: 2px;
+    transition: left .2s;
+  }
+  .setting-toggle input[type="checkbox"]:checked::after {
+    left: 22px;
+  }
+  .setting-toggle span {
+    font-size: 14px; font-weight: 600; color: var(--ink);
+  }
 
   #toast {
     position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 90px);
@@ -464,7 +487,15 @@
       <p class="setting-note">保存先：ブラウザ内データベース（IndexedDB）。容量の上限を気にせず保存できます。</p>
     </div>
     <div class="setting-group">
-      <h2>5. アプリ情報</h2>
+      <h2>5. 画面回転</h2>
+      <label class="setting-toggle">
+        <input type="checkbox" id="rotation-lock-toggle">
+        <span>縦向きに固定する</span>
+      </label>
+      <p class="setting-note">オンにすると、デバイスの傾きに関わらず画面を常に縦向きで表示します。</p>
+    </div>
+    <div class="setting-group">
+      <h2>6. アプリ情報</h2>
       <p class="setting-note">てがきメモ v<span id="app-version-label"></span>（PWA対応・オフラインでも使用できます）</p>
     </div>
   </div>
@@ -500,7 +531,7 @@
  * ===================================================== */
 
 /* ---------- アプリバージョン（PWA更新管理の一元定数） ---------- */
-const APP_VERSION = "5.0.1";
+const APP_VERSION = "5.1.0";
 
 /* ---------- 定数 ---------- */
 const DB_NAME = "tegaki-db", DB_VER = 2;
@@ -599,7 +630,7 @@ async function migrateFromLocalStorage() {
 let meta = [];
 let folders = [];   // ユーザー作成フォルダ {id, name, createdAt}（"すべてのメモ"は id:null の仮想フォルダ）
 let currentFolderId = null;   // 一覧画面で選択中のフォルダ（null＝すべてのメモ）
-let settings = { theme: "light", tool: "pen", widthIdx: 1, colorIdx: 0 };
+let settings = { theme: "light", tool: "pen", widthIdx: 1, colorIdx: 0, rotationLock: true };
 let cur = null;
 let saveTimer = null;
 let dbReady = false;
@@ -1814,9 +1845,43 @@ function toast(msg) {
   setTool(settings.tool);
   refreshToolIndicators();
   renderList();
+  applyRotationLock();
   const vLabel = $("app-version-label");
   if (vLabel) vLabel.textContent = APP_VERSION;
+  const rotToggle = $("rotation-lock-toggle");
+  if (rotToggle) {
+    rotToggle.checked = !!settings.rotationLock;
+    rotToggle.addEventListener("change", () => {
+      settings.rotationLock = rotToggle.checked;
+      saveSettings();
+      applyRotationLock();
+      toast(rotToggle.checked ? "縦向きに固定しました" : "自由に回転できるようになりました");
+    });
+  }
 })();
+
+/* =====================================================
+ * 画面回転制御
+ * ===================================================== */
+function applyRotationLock() {
+  if (!settings.rotationLock) {
+    // ロック解除：回転を許可
+    if (screen.orientation && screen.orientation.unlock) {
+      screen.orientation.unlock().catch(() => {});
+    }
+    document.documentElement.style.setProperty("--orientation-lock", "none");
+  } else {
+    // ロック有効：縦向き固定
+    if (screen.orientation && screen.orientation.lock) {
+      screen.orientation.lock("portrait-primary").catch(() => {
+        // API未対応時は回転を許可（フォールバック）
+        if (screen.orientation && screen.orientation.unlock) {
+          screen.orientation.unlock().catch(() => {});
+        }
+      });
+    }
+  }
+}
 
 /* =====================================================
  * PWA / Service Worker 登録
