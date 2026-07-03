@@ -360,18 +360,30 @@
    * screen.orientation.lock() はブラウザ非対応・非スタンドアロン環境で
    * 動作しないため、横向き検知時にビューポート全体を回転させて
    * 見た目上の縦向きを常に維持する。
+   * - 100dvh/100dvw を優先使用（モバイルのアドレスバー表示/非表示による
+   *   vh のガタつきを避け、回転時のズレ・ジャンプを防止）
+   * - 対応ブラウザが無ければ 100vh/100vw にフォールバック
    */
-  html.force-portrait {
+  html.force-portrait, html.force-portrait body {
     overflow: hidden;
+    overscroll-behavior: none;
   }
   @media screen and (orientation: landscape) {
     html.force-portrait body {
       position: fixed;
       top: 0; left: 0;
+      margin: 0;
       width: 100vh;
       height: 100vw;
       transform-origin: top left;
       transform: rotate(90deg) translateY(-100vh);
+    }
+    @supports (width: 100dvh) {
+      html.force-portrait body {
+        width: 100dvh;
+        height: 100dvw;
+        transform: rotate(90deg) translateY(-100dvh);
+      }
     }
   }
   .setting-toggle {
@@ -550,7 +562,7 @@
  * ===================================================== */
 
 /* ---------- アプリバージョン（PWA更新管理の一元定数） ---------- */
-const APP_VERSION = "5.1.1";
+const APP_VERSION = "5.1.2";
 
 /* ---------- 定数 ---------- */
 const DB_NAME = "tegaki-db", DB_VER = 2;
@@ -891,14 +903,39 @@ function layoutCanvas() {
   patternsDirty = true;
   clampViewPan();
 }
-window.addEventListener("resize", () => {
-  if (cur && screens.editor.classList.contains("active")) {
-    const needBase = base.width !== cur.note.w * BQ;
-    layoutCanvas();
-    if (needBase) rebuildBase();
-    redrawAll();
-  }
-});
+/* ---- キャンバスの再レイアウト（リサイズ／回転時） ----
+ * orientationchange / resize は「回転アニメーションやアドレスバーの
+ * 表示切替が完了する前」に発火することが多く、その瞬間に
+ * clientWidth/Height を読むと古い数値のままズレが生じる。
+ * そのため複数フレーム後に再計測する形で確実に安定させる。
+ */
+function reflowCanvasSafely() {
+  if (!cur || !screens.editor.classList.contains("active")) return;
+  const needBase = base.width !== cur.note.w * BQ;
+  layoutCanvas();
+  if (needBase) rebuildBase();
+  redrawAll();
+}
+let reflowRAF = null, reflowTimer = null;
+function scheduleCanvasReflow() {
+  if (reflowRAF) cancelAnimationFrame(reflowRAF);
+  if (reflowTimer) clearTimeout(reflowTimer);
+  // 直後の1回（大まかな追従）
+  reflowRAF = requestAnimationFrame(reflowCanvasSafely);
+  // CSSの回転トランジション・アドレスバー変化が収まった後にもう一度（最終確定）
+  reflowTimer = setTimeout(reflowCanvasSafely, 260);
+}
+window.addEventListener("resize", scheduleCanvasReflow);
+window.addEventListener("orientationchange", scheduleCanvasReflow);
+if (window.visualViewport) {
+  window.visualViewport.addEventListener("resize", scheduleCanvasReflow);
+}
+if (window.matchMedia) {
+  const mq = window.matchMedia("(orientation: landscape)");
+  const mqHandler = () => scheduleCanvasReflow();
+  if (mq.addEventListener) mq.addEventListener("change", mqHandler);
+  else if (mq.addListener) mq.addListener(mqHandler); // 旧Safari互換
+}
 
 /* ---- 全消去マーカー {m:"x"} 以降のストロークだけが「見えている」内容 ---- */
 function visibleStrokes(arr) {
@@ -1876,6 +1913,7 @@ function toast(msg) {
       settings.rotationLock = rotToggle.checked;
       saveSettings();
       applyRotationLock();
+      scheduleCanvasReflow();   // 固定/解除の切替直後もキャンバスサイズを確実に追従させる
       toast(rotToggle.checked ? "縦向きに固定しました" : "自由に回転できるようになりました");
     });
   }
@@ -1886,7 +1924,9 @@ function toast(msg) {
  * - screen.orientation.lock() はブラウザ非対応・非スタンドアロン
  *   環境（通常のタブ表示など）では動作しないため補助的に試みるのみ。
  * - 確実に効くのは、横向き検知時に <html> へクラスを付与し、
- *   CSSでbody全体を90度回転させて縦向きの見た目を維持する方式。
+ *   CSSでbody全体を90度回転させて縦向きの見た目を維持する方式
+ *   （実際の回転検知と反映は CSS の @media(orientation) が担当し、
+ *    JSはクラスの付け外しのみを行う＝二重制御による競合を避ける）。
  * ===================================================== */
 function applyRotationLock() {
   const html = document.documentElement;
@@ -1902,9 +1942,8 @@ function applyRotationLock() {
       try { screen.orientation.unlock(); } catch (e) {}
     }
   }
+  scheduleCanvasReflow();   // クラス切替直後のキャンバスずれを防ぐ
 }
-window.addEventListener("resize", () => { if (settings.rotationLock) applyRotationLock(); });
-window.addEventListener("orientationchange", () => { if (settings.rotationLock) applyRotationLock(); });
 
 /* =====================================================
  * PWA / Service Worker 登録
