@@ -355,6 +355,25 @@
   .theme-toggle button { flex: 1; min-height: 54px; font-size: 15px; font-weight: 600; color: var(--muted); }
   .theme-toggle button.selected { background: var(--accent); color: #fff; }
   #settings-note, .setting-note { font-size: 12px; color: var(--muted); line-height: 1.8; margin-top: 6px; }
+
+  /* ============ 縦向き固定（CSSによる強制回転） ============
+   * screen.orientation.lock() はブラウザ非対応・非スタンドアロン環境で
+   * 動作しないため、横向き検知時にビューポート全体を回転させて
+   * 見た目上の縦向きを常に維持する。
+   */
+  html.force-portrait {
+    overflow: hidden;
+  }
+  @media screen and (orientation: landscape) {
+    html.force-portrait body {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vh;
+      height: 100vw;
+      transform-origin: top left;
+      transform: rotate(90deg) translateY(-100vh);
+    }
+  }
   .setting-toggle {
     display: flex; align-items: center; gap: 12px; cursor: pointer; user-select: none;
     padding: 12px 0;
@@ -531,7 +550,7 @@
  * ===================================================== */
 
 /* ---------- アプリバージョン（PWA更新管理の一元定数） ---------- */
-const APP_VERSION = "5.1.0";
+const APP_VERSION = "5.1.1";
 
 /* ---------- 定数 ---------- */
 const DB_NAME = "tegaki-db", DB_VER = 2;
@@ -854,13 +873,15 @@ function leaveEditor() {
 function layoutCanvas() {
   if (!cur) return;
   const frame = $("canvas-frame");
-  const rect = frame.getBoundingClientRect();
-  if (rect.width < 10) return;
-  if (!cur.note.w) { cur.note.w = Math.round(rect.width); cur.note.h = Math.round(rect.height); }
+  // clientWidth/clientHeight は transform（縦向き固定の回転演出）の影響を受けないため、
+  // 論理サイズ（メモのデータ座標系）を正しく維持できる
+  const w = frame.clientWidth, h = frame.clientHeight;
+  if (w < 10) return;
+  if (!cur.note.w) { cur.note.w = Math.round(w); cur.note.h = Math.round(h); }
   dpr = Math.min(window.devicePixelRatio || 1, 3);
-  scale = rect.width / cur.note.w;
-  canvas.width = Math.round(rect.width * dpr);
-  canvas.height = Math.round(rect.height * dpr);
+  scale = w / cur.note.w;
+  canvas.width = Math.round(w * dpr);
+  canvas.height = Math.round(h * dpr);
   off.width = canvas.width;
   off.height = canvas.height;
   if (base.width !== cur.note.w * BQ) {
@@ -1862,26 +1883,28 @@ function toast(msg) {
 
 /* =====================================================
  * 画面回転制御
+ * - screen.orientation.lock() はブラウザ非対応・非スタンドアロン
+ *   環境（通常のタブ表示など）では動作しないため補助的に試みるのみ。
+ * - 確実に効くのは、横向き検知時に <html> へクラスを付与し、
+ *   CSSでbody全体を90度回転させて縦向きの見た目を維持する方式。
  * ===================================================== */
 function applyRotationLock() {
-  if (!settings.rotationLock) {
-    // ロック解除：回転を許可
-    if (screen.orientation && screen.orientation.unlock) {
-      screen.orientation.unlock().catch(() => {});
-    }
-    document.documentElement.style.setProperty("--orientation-lock", "none");
-  } else {
-    // ロック有効：縦向き固定
+  const html = document.documentElement;
+  if (settings.rotationLock) {
+    html.classList.add("force-portrait");
+    // 対応環境ではネイティブのロックも試みる（ベストエフォート、失敗しても無視）
     if (screen.orientation && screen.orientation.lock) {
-      screen.orientation.lock("portrait-primary").catch(() => {
-        // API未対応時は回転を許可（フォールバック）
-        if (screen.orientation && screen.orientation.unlock) {
-          screen.orientation.unlock().catch(() => {});
-        }
-      });
+      screen.orientation.lock("portrait-primary").catch(() => {});
+    }
+  } else {
+    html.classList.remove("force-portrait");
+    if (screen.orientation && screen.orientation.unlock) {
+      try { screen.orientation.unlock(); } catch (e) {}
     }
   }
 }
+window.addEventListener("resize", () => { if (settings.rotationLock) applyRotationLock(); });
+window.addEventListener("orientationchange", () => { if (settings.rotationLock) applyRotationLock(); });
 
 /* =====================================================
  * PWA / Service Worker 登録
