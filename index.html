@@ -558,7 +558,7 @@
  * ===================================================== */
 
 /* ---------- アプリバージョン（PWA更新管理の一元定数） ---------- */
-const APP_VERSION = "5.3.0";
+const APP_VERSION = "5.3.1";
 
 /* ---------- 定数 ---------- */
 const DB_NAME = "tegaki-db", DB_VER = 2;
@@ -922,13 +922,21 @@ function scheduleCanvasReflow() {
 // resize/orientationchange/visualViewportいずれも capture フェーズで最速受信し、
 // ロック中であれば即座に握りつぶして下流の処理へ一切伝播させない
 function guardedReflow(e) {
-  if (settings.rotationLock) return;
+  if (settings.rotationLock) {
+    reapplyFreezeStyle();   // 念のため凍結スタイルを即座に再アサート（保険）
+    return;
+  }
   scheduleCanvasReflow();
 }
 window.addEventListener("resize", guardedReflow, { capture: true });
 window.addEventListener("orientationchange", guardedReflow, { capture: true });
 if (window.visualViewport) {
   window.visualViewport.addEventListener("resize", guardedReflow, { capture: true });
+}
+// Android Chrome等では screen.orientation の change が window.orientationchange より
+// 早く・確実に発火するため、これも同じガードで拾っておく（保険の多重化）
+if (screen.orientation && screen.orientation.addEventListener) {
+  screen.orientation.addEventListener("change", guardedReflow);
 }
 
 /* ---- 全消去マーカー {m:"x"} 以降のストロークだけが「見えている」内容 ---- */
@@ -1933,14 +1941,24 @@ function capturePortraitSize() {
   frozenPortraitSize = (w > h) ? { w: h, h: w } : { w, h };
 }
 
+function buildFreezeStyleText() {
+  return `position:fixed; top:0; left:0; margin:0; padding:0; ` +
+         `width:${frozenPortraitSize.w}px; height:${frozenPortraitSize.h}px; ` +
+         `overflow:hidden; ` +
+         // transform を持たせることで、配下の position:fixed 要素（.screen / FAB /
+         // シート / ポップオーバー等）の基準（containing block）が
+         // 「実際のビューポート」から「この body 自身」に切り替わる。
+         // これが無いと、html/bodyを凍結しても中の fixed 要素だけが
+         // 実機の横向きビューポートに追従してしまう。
+         `transform: translateZ(0);`;
+}
+
 function freezePortrait() {
   capturePortraitSize();
   const html = document.documentElement;
   const body = document.body;
   html.classList.add("force-portrait");
-  const style = `position:fixed; top:0; left:0; margin:0; padding:0; ` +
-                `width:${frozenPortraitSize.w}px; height:${frozenPortraitSize.h}px; ` +
-                `overflow:hidden;`;
+  const style = buildFreezeStyleText();
   html.style.cssText += style;
   body.style.cssText += style;
   // 対応環境ではネイティブAPIのロックも補助的に試みる（失敗は無視）
@@ -1951,11 +1969,22 @@ function freezePortrait() {
   requestAnimationFrame(reflowCanvasSafely);
 }
 
+// 回転イベント発生時の保険：既に確定済みの凍結サイズ（frozenPortraitSize）を
+// 再計測せず、そのままインラインstyleへ再アサートする。
+// （※ capturePortraitSize は呼ばない＝横向きになった瞬間の寸法で
+//    上書きしてしまうと元も子もないため）
+function reapplyFreezeStyle() {
+  if (!settings.rotationLock || !frozenPortraitSize) return;
+  const style = buildFreezeStyleText();
+  document.documentElement.style.cssText += style;
+  document.body.style.cssText += style;
+}
+
 function unfreezePortrait() {
   const html = document.documentElement;
   const body = document.body;
   html.classList.remove("force-portrait");
-  for (const prop of ["position", "top", "left", "margin", "padding", "width", "height", "overflow"]) {
+  for (const prop of ["position", "top", "left", "margin", "padding", "width", "height", "overflow", "transform"]) {
     html.style.removeProperty(prop);
     body.style.removeProperty(prop);
   }
