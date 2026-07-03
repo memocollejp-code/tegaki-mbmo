@@ -69,7 +69,12 @@
     background: var(--surface); border-bottom: 1px solid var(--line);
     flex-shrink: 0;
   }
-  .appbar h1 { font-size: 18px; font-weight: 700; letter-spacing: .04em; flex: 1; }
+  .appbar h1 { font-size: 18px; font-weight: 700; letter-spacing: .04em; flex: 1; display: flex; align-items: baseline; gap: 6px; }
+  .version-badge {
+    font-size: 11px; font-weight: 700; color: var(--accent);
+    background: var(--accent-soft); border-radius: 8px;
+    padding: 2px 7px; letter-spacing: 0;
+  }
   .icon-btn {
     min-width: 44px; min-height: var(--tap);
     display: inline-flex; align-items: center; justify-content: center;
@@ -360,9 +365,11 @@
    * screen.orientation.lock() はブラウザ非対応・非スタンドアロン環境で
    * 動作しないため、横向き検知時にビューポート全体を回転させて
    * 見た目上の縦向きを常に維持する。
+   * - CSSのメディアクエリだけでは「右に倒した／左に倒した」を区別できないため、
+   *   実際の回転方向はJS側で screen.orientation.type 等から判定し、
+   *   rot-cw（landscape-primary）/ rot-ccw（landscape-secondary）を付与する。
    * - 100dvh/100dvw を優先使用（モバイルのアドレスバー表示/非表示による
    *   vh のガタつきを避け、回転時のズレ・ジャンプを防止）
-   * - 対応ブラウザが無ければ 100vh/100vw にフォールバック
    */
   html.force-portrait, html.force-portrait body {
     overflow: hidden;
@@ -376,14 +383,16 @@
       width: 100vh;
       height: 100vw;
       transform-origin: top left;
-      transform: rotate(90deg) translateY(-100vh);
     }
+    html.force-portrait.rot-cw body  { transform: rotate(90deg)  translateY(-100vh); }
+    html.force-portrait.rot-ccw body { transform: rotate(-90deg) translateX(-100vh); }
     @supports (width: 100dvh) {
       html.force-portrait body {
         width: 100dvh;
         height: 100dvw;
-        transform: rotate(90deg) translateY(-100dvh);
       }
+      html.force-portrait.rot-cw body  { transform: rotate(90deg)  translateY(-100dvh); }
+      html.force-portrait.rot-ccw body { transform: rotate(-90deg) translateX(-100dvh); }
     }
   }
   .setting-toggle {
@@ -426,7 +435,7 @@
 <!-- ============ 1. メモ一覧画面 ============ -->
 <section id="screen-list" class="screen active">
   <header class="appbar">
-    <h1>てがきメモ</h1>
+    <h1>てがきメモ <span class="version-badge" id="title-version-badge"></span></h1>
     <button class="icon-btn" id="btn-settings" aria-label="設定">⚙️</button>
   </header>
   <div id="folder-bar">
@@ -562,7 +571,7 @@
  * ===================================================== */
 
 /* ---------- アプリバージョン（PWA更新管理の一元定数） ---------- */
-const APP_VERSION = "5.1.2";
+const APP_VERSION = "5.2.0";
 
 /* ---------- 定数 ---------- */
 const DB_NAME = "tegaki-db", DB_VER = 2;
@@ -918,12 +927,19 @@ function reflowCanvasSafely() {
 }
 let reflowRAF = null, reflowTimer = null;
 function scheduleCanvasReflow() {
+  if (settings.rotationLock) applyLandscapeDirection();   // 回転方向の再判定を先に行う
   if (reflowRAF) cancelAnimationFrame(reflowRAF);
   if (reflowTimer) clearTimeout(reflowTimer);
   // 直後の1回（大まかな追従）
-  reflowRAF = requestAnimationFrame(reflowCanvasSafely);
+  reflowRAF = requestAnimationFrame(() => {
+    if (settings.rotationLock) applyLandscapeDirection();
+    reflowCanvasSafely();
+  });
   // CSSの回転トランジション・アドレスバー変化が収まった後にもう一度（最終確定）
-  reflowTimer = setTimeout(reflowCanvasSafely, 260);
+  reflowTimer = setTimeout(() => {
+    if (settings.rotationLock) applyLandscapeDirection();
+    reflowCanvasSafely();
+  }, 260);
 }
 window.addEventListener("resize", scheduleCanvasReflow);
 window.addEventListener("orientationchange", scheduleCanvasReflow);
@@ -1906,6 +1922,8 @@ function toast(msg) {
   applyRotationLock();
   const vLabel = $("app-version-label");
   if (vLabel) vLabel.textContent = APP_VERSION;
+  const titleBadge = $("title-version-badge");
+  if (titleBadge) titleBadge.textContent = "v" + APP_VERSION;
   const rotToggle = $("rotation-lock-toggle");
   if (rotToggle) {
     rotToggle.checked = !!settings.rotationLock;
@@ -1925,13 +1943,40 @@ function toast(msg) {
  *   環境（通常のタブ表示など）では動作しないため補助的に試みるのみ。
  * - 確実に効くのは、横向き検知時に <html> へクラスを付与し、
  *   CSSでbody全体を90度回転させて縦向きの見た目を維持する方式
- *   （実際の回転検知と反映は CSS の @media(orientation) が担当し、
- *    JSはクラスの付け外しのみを行う＝二重制御による競合を避ける）。
+ *   （実際の横向き判定は CSS の @media(orientation) が担当し、
+ *    「右に倒したか／左に倒したか」の回転方向だけJSが判定して
+ *    rot-cw / rot-ccw クラスを付与する）。
  * ===================================================== */
+function detectLandscapeDirection() {
+  // 標準API（Android Chrome 等）
+  const type = (screen.orientation && screen.orientation.type) || "";
+  if (type === "landscape-primary") return "cw";
+  if (type === "landscape-secondary") return "ccw";
+  // 旧式フォールバック（iOS Safari等）：window.orientation は 90 / -90
+  if (typeof window.orientation === "number") {
+    if (window.orientation === 90) return "cw";
+    if (window.orientation === -90) return "ccw";
+  }
+  return null;   // 判定不能時は直前の状態を維持
+}
+function applyLandscapeDirection() {
+  const html = document.documentElement;
+  const dir = detectLandscapeDirection();
+  if (dir === "ccw") {
+    html.classList.add("rot-ccw");
+    html.classList.remove("rot-cw");
+  } else if (dir === "cw") {
+    html.classList.add("rot-cw");
+    html.classList.remove("rot-ccw");
+  } else if (!html.classList.contains("rot-cw") && !html.classList.contains("rot-ccw")) {
+    html.classList.add("rot-cw");   // 初回・判定不能時のデフォルト
+  }
+}
 function applyRotationLock() {
   const html = document.documentElement;
   if (settings.rotationLock) {
     html.classList.add("force-portrait");
+    applyLandscapeDirection();
     // 対応環境ではネイティブのロックも試みる（ベストエフォート、失敗しても無視）
     if (screen.orientation && screen.orientation.lock) {
       screen.orientation.lock("portrait-primary").catch(() => {});
