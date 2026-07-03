@@ -20,7 +20,10 @@ const CACHE_NAME = "tegaki-memo-cache-" + APP_VERSION;
 const SHELL_ASSETS = [
   "./",
   "./index.html",
-  "./manifest.json"
+  "./manifest.json",
+  "./icon-192.png",
+  "./icon-512.png",
+  "./icon-512-maskable.png"
 ];
 
 /* ---------- install：新バージョンを即座にキャッシュし、即座に有効化準備 ---------- */

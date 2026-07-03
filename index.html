@@ -361,27 +361,6 @@
   .theme-toggle button.selected { background: var(--accent); color: #fff; }
   #settings-note, .setting-note { font-size: 12px; color: var(--muted); line-height: 1.8; margin-top: 6px; }
 
-  /* ============ 縦向き固定（凍結ロック方式） ============
-   * 旧方式（横向き検知→CSS transform:rotateで回転）は、実際に
-   * ビューポートがリサイズされてから演出で戻すため、その過程で
-   * resize/orientationchangeが発火してlayoutCanvasが再計算され、
-   * ガタつき・キャンバスのズレが発生していた。
-   *
-   * 新方式：横向きへの変化そのものを検知させない。
-   * ロックON時点の「縦向きの実ピクセルサイズ」をJSで一度だけ取得し、
-   * <html>に position:fixed + 固定px の width/height をインラインstyleで
-   * 注入して視覚的に完全凍結する。ビューポートが横向きに変わっても
-   * 画面の見た目・キャンバスのサイズは一切変化しない。
-   * （rotate等の演出は行わないため、"崩してから戻す"工程自体が存在しない）
-   */
-  html.force-portrait {
-    overflow: hidden !important;
-  }
-  html.force-portrait body {
-    overflow: hidden !important;
-    overscroll-behavior: none;
-    /* 実際の width/height/position は JS が凍結時にインラインstyleで固定注入する */
-  }
   .setting-toggle {
     display: flex; align-items: center; gap: 12px; cursor: pointer; user-select: none;
     padding: 12px 0;
@@ -519,7 +498,7 @@
         <input type="checkbox" id="rotation-lock-toggle">
         <span>縦向きに固定する</span>
       </label>
-      <p class="setting-note">オンにすると、デバイスの傾きに関わらず画面を常に縦向きで表示します。</p>
+      <p class="setting-note">オンにすると、デバイスの傾きに関わらず画面を常に縦向きで表示します。<br>※この設定は「ホーム画面に追加」したアプリで有効です。ブラウザのタブで開いている場合は端末側の自動回転設定に従います。</p>
     </div>
     <div class="setting-group">
       <h2>6. アプリ情報</h2>
@@ -558,7 +537,7 @@
  * ===================================================== */
 
 /* ---------- アプリバージョン（PWA更新管理の一元定数） ---------- */
-const APP_VERSION = "5.3.1";
+const APP_VERSION = "5.4.0";
 
 /* ---------- 定数 ---------- */
 const DB_NAME = "tegaki-db", DB_VER = 2;
@@ -899,10 +878,10 @@ function layoutCanvas() {
   patternsDirty = true;
   clampViewPan();
 }
-/* ---- キャンバスの再レイアウト（リサイズ時） ----
- * 「縦向きに固定する」がONの間は、横向きへの変化そのものを
- * 完全に無視する（= layoutCanvasを一切呼ばせない）。
- * これにより「崩れてから戻す」工程自体が存在せず、ガタつきが起きない。
+/* ---- キャンバスの再レイアウト（リサイズ／回転時） ----
+ * 縦向き固定はOSレベル（manifest + Screen Orientation API）で行うため、
+ * 固定中は横向きへのリサイズイベント自体が発生しない。
+ * ここでは発生したリサイズに素直に追従して再レイアウトする。
  */
 function reflowCanvasSafely() {
   if (!cur || !screens.editor.classList.contains("active")) return;
@@ -913,30 +892,16 @@ function reflowCanvasSafely() {
 }
 let reflowRAF = null, reflowTimer = null;
 function scheduleCanvasReflow() {
-  if (settings.rotationLock) return;   // ロック中は再計算そのものを完全抑制
   if (reflowRAF) cancelAnimationFrame(reflowRAF);
   if (reflowTimer) clearTimeout(reflowTimer);
   reflowRAF = requestAnimationFrame(reflowCanvasSafely);
+  // 回転アニメーション・アドレスバー変化が収まった後にもう一度（最終確定）
   reflowTimer = setTimeout(reflowCanvasSafely, 260);
 }
-// resize/orientationchange/visualViewportいずれも capture フェーズで最速受信し、
-// ロック中であれば即座に握りつぶして下流の処理へ一切伝播させない
-function guardedReflow(e) {
-  if (settings.rotationLock) {
-    reapplyFreezeStyle();   // 念のため凍結スタイルを即座に再アサート（保険）
-    return;
-  }
-  scheduleCanvasReflow();
-}
-window.addEventListener("resize", guardedReflow, { capture: true });
-window.addEventListener("orientationchange", guardedReflow, { capture: true });
+window.addEventListener("resize", scheduleCanvasReflow);
+window.addEventListener("orientationchange", scheduleCanvasReflow);
 if (window.visualViewport) {
-  window.visualViewport.addEventListener("resize", guardedReflow, { capture: true });
-}
-// Android Chrome等では screen.orientation の change が window.orientationchange より
-// 早く・確実に発火するため、これも同じガードで拾っておく（保険の多重化）
-if (screen.orientation && screen.orientation.addEventListener) {
-  screen.orientation.addEventListener("change", guardedReflow);
+  window.visualViewport.addEventListener("resize", scheduleCanvasReflow);
 }
 
 /* ---- 全消去マーカー {m:"x"} 以降のストロークだけが「見えている」内容 ---- */
@@ -1923,81 +1888,30 @@ function toast(msg) {
 })();
 
 /* =====================================================
- * 画面回転制御（凍結ロック方式）
- * - screen.orientation.lock() はブラウザ非対応・非スタンドアロン
- *   環境（通常のタブ表示など）では動作しないため補助的に試みるのみ。
- * - 確実に効くのは、ロックON時点の「縦向きの実ピクセルサイズ」を
- *   一度だけ記憶し、<html>/<body> に position:fixed + 固定px の
- *   width/height をインラインstyleで注入して画面を完全凍結する方式。
- *   横向きへビューポートが変化しても、見た目上のレイアウトも
- *   キャンバスのサイズも一切動かない（"崩れてから戻す"工程が存在しない）。
+ * 画面回転制御（OSレベルロック方式）
+ * - Web側のCSS/JSでは、OSがアプリウィンドウ自体を回転させる動作を
+ *   止めることは原理的に不可能（過去の回転演出・凍結方式は撤廃）。
+ * - 正攻法は2段構え：
+ *   (1) manifest.json の "orientation": "portrait"
+ *       → 正式インストールされたPWAはOSレベルで縦固定（既定値）
+ *   (2) Screen Orientation API
+ *       → トグルOFF時は lock("any") でmanifestの既定を上書きして
+ *          回転を許可、ON時は lock("portrait") で縦固定に戻す
+ * - これらが効くのは「ホーム画面に正式インストールされたPWA」のみ。
+ *   ブラウザのタブ表示では端末側の自動回転設定に従う（Web仕様の限界）。
  * ===================================================== */
-let frozenPortraitSize = null;   // { w, h } ロック時に一度だけ確定させる基準サイズ
-
-function capturePortraitSize() {
-  const w = window.innerWidth, h = window.innerHeight;
-  // 現在すでに横向き（幅>高さ）の状態でロックした場合は、
-  // 縦横を入れ替えて「あるべき縦向きサイズ」を推定する
-  frozenPortraitSize = (w > h) ? { w: h, h: w } : { w, h };
-}
-
-function buildFreezeStyleText() {
-  return `position:fixed; top:0; left:0; margin:0; padding:0; ` +
-         `width:${frozenPortraitSize.w}px; height:${frozenPortraitSize.h}px; ` +
-         `overflow:hidden; ` +
-         // transform を持たせることで、配下の position:fixed 要素（.screen / FAB /
-         // シート / ポップオーバー等）の基準（containing block）が
-         // 「実際のビューポート」から「この body 自身」に切り替わる。
-         // これが無いと、html/bodyを凍結しても中の fixed 要素だけが
-         // 実機の横向きビューポートに追従してしまう。
-         `transform: translateZ(0);`;
-}
-
-function freezePortrait() {
-  capturePortraitSize();
-  const html = document.documentElement;
-  const body = document.body;
-  html.classList.add("force-portrait");
-  const style = buildFreezeStyleText();
-  html.style.cssText += style;
-  body.style.cssText += style;
-  // 対応環境ではネイティブAPIのロックも補助的に試みる（失敗は無視）
-  if (screen.orientation && screen.orientation.lock) {
-    screen.orientation.lock("portrait-primary").catch(() => {});
-  }
-  // 凍結直後に一度だけ確定サイズでキャンバスを合わせる
-  requestAnimationFrame(reflowCanvasSafely);
-}
-
-// 回転イベント発生時の保険：既に確定済みの凍結サイズ（frozenPortraitSize）を
-// 再計測せず、そのままインラインstyleへ再アサートする。
-// （※ capturePortraitSize は呼ばない＝横向きになった瞬間の寸法で
-//    上書きしてしまうと元も子もないため）
-function reapplyFreezeStyle() {
-  if (!settings.rotationLock || !frozenPortraitSize) return;
-  const style = buildFreezeStyleText();
-  document.documentElement.style.cssText += style;
-  document.body.style.cssText += style;
-}
-
-function unfreezePortrait() {
-  const html = document.documentElement;
-  const body = document.body;
-  html.classList.remove("force-portrait");
-  for (const prop of ["position", "top", "left", "margin", "padding", "width", "height", "overflow", "transform"]) {
-    html.style.removeProperty(prop);
-    body.style.removeProperty(prop);
-  }
-  frozenPortraitSize = null;
-  if (screen.orientation && screen.orientation.unlock) {
-    try { screen.orientation.unlock(); } catch (e) {}
-  }
-  scheduleCanvasReflow();
-}
-
 function applyRotationLock() {
-  if (settings.rotationLock) freezePortrait();
-  else unfreezePortrait();
+  if (!screen.orientation || !screen.orientation.lock) return;
+  if (settings.rotationLock) {
+    // 縦向き固定（portrait-primary/secondary の両方を許容する "portrait" 指定）
+    screen.orientation.lock("portrait").catch(() => {});
+  } else {
+    // manifest の既定（portrait）を上書きして全方向を許可
+    screen.orientation.lock("any").catch(() => {
+      // "any" 非対応環境では unlock で既定に戻す（既定=manifestのportrait）
+      try { screen.orientation.unlock(); } catch (e) {}
+    });
+  }
 }
 
 /* =====================================================
