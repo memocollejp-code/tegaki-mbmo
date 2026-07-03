@@ -361,39 +361,26 @@
   .theme-toggle button.selected { background: var(--accent); color: #fff; }
   #settings-note, .setting-note { font-size: 12px; color: var(--muted); line-height: 1.8; margin-top: 6px; }
 
-  /* ============ 縦向き固定（CSSによる強制回転） ============
-   * screen.orientation.lock() はブラウザ非対応・非スタンドアロン環境で
-   * 動作しないため、横向き検知時にビューポート全体を回転させて
-   * 見た目上の縦向きを常に維持する。
-   * - CSSのメディアクエリだけでは「右に倒した／左に倒した」を区別できないため、
-   *   実際の回転方向はJS側で screen.orientation.type 等から判定し、
-   *   rot-cw（landscape-primary）/ rot-ccw（landscape-secondary）を付与する。
-   * - 100dvh/100dvw を優先使用（モバイルのアドレスバー表示/非表示による
-   *   vh のガタつきを避け、回転時のズレ・ジャンプを防止）
+  /* ============ 縦向き固定（凍結ロック方式） ============
+   * 旧方式（横向き検知→CSS transform:rotateで回転）は、実際に
+   * ビューポートがリサイズされてから演出で戻すため、その過程で
+   * resize/orientationchangeが発火してlayoutCanvasが再計算され、
+   * ガタつき・キャンバスのズレが発生していた。
+   *
+   * 新方式：横向きへの変化そのものを検知させない。
+   * ロックON時点の「縦向きの実ピクセルサイズ」をJSで一度だけ取得し、
+   * <html>に position:fixed + 固定px の width/height をインラインstyleで
+   * 注入して視覚的に完全凍結する。ビューポートが横向きに変わっても
+   * 画面の見た目・キャンバスのサイズは一切変化しない。
+   * （rotate等の演出は行わないため、"崩してから戻す"工程自体が存在しない）
    */
-  html.force-portrait, html.force-portrait body {
-    overflow: hidden;
-    overscroll-behavior: none;
+  html.force-portrait {
+    overflow: hidden !important;
   }
-  @media screen and (orientation: landscape) {
-    html.force-portrait body {
-      position: fixed;
-      top: 0; left: 0;
-      margin: 0;
-      width: 100vh;
-      height: 100vw;
-      transform-origin: top left;
-    }
-    html.force-portrait.rot-cw body  { transform: rotate(90deg)  translateY(-100vh); }
-    html.force-portrait.rot-ccw body { transform: rotate(-90deg) translateX(-100vh); }
-    @supports (width: 100dvh) {
-      html.force-portrait body {
-        width: 100dvh;
-        height: 100dvw;
-      }
-      html.force-portrait.rot-cw body  { transform: rotate(90deg)  translateY(-100dvh); }
-      html.force-portrait.rot-ccw body { transform: rotate(-90deg) translateX(-100dvh); }
-    }
+  html.force-portrait body {
+    overflow: hidden !important;
+    overscroll-behavior: none;
+    /* 実際の width/height/position は JS が凍結時にインラインstyleで固定注入する */
   }
   .setting-toggle {
     display: flex; align-items: center; gap: 12px; cursor: pointer; user-select: none;
@@ -571,7 +558,7 @@
  * ===================================================== */
 
 /* ---------- アプリバージョン（PWA更新管理の一元定数） ---------- */
-const APP_VERSION = "5.2.0";
+const APP_VERSION = "5.3.0";
 
 /* ---------- 定数 ---------- */
 const DB_NAME = "tegaki-db", DB_VER = 2;
@@ -912,11 +899,10 @@ function layoutCanvas() {
   patternsDirty = true;
   clampViewPan();
 }
-/* ---- キャンバスの再レイアウト（リサイズ／回転時） ----
- * orientationchange / resize は「回転アニメーションやアドレスバーの
- * 表示切替が完了する前」に発火することが多く、その瞬間に
- * clientWidth/Height を読むと古い数値のままズレが生じる。
- * そのため複数フレーム後に再計測する形で確実に安定させる。
+/* ---- キャンバスの再レイアウト（リサイズ時） ----
+ * 「縦向きに固定する」がONの間は、横向きへの変化そのものを
+ * 完全に無視する（= layoutCanvasを一切呼ばせない）。
+ * これにより「崩れてから戻す」工程自体が存在せず、ガタつきが起きない。
  */
 function reflowCanvasSafely() {
   if (!cur || !screens.editor.classList.contains("active")) return;
@@ -927,30 +913,22 @@ function reflowCanvasSafely() {
 }
 let reflowRAF = null, reflowTimer = null;
 function scheduleCanvasReflow() {
-  if (settings.rotationLock) applyLandscapeDirection();   // 回転方向の再判定を先に行う
+  if (settings.rotationLock) return;   // ロック中は再計算そのものを完全抑制
   if (reflowRAF) cancelAnimationFrame(reflowRAF);
   if (reflowTimer) clearTimeout(reflowTimer);
-  // 直後の1回（大まかな追従）
-  reflowRAF = requestAnimationFrame(() => {
-    if (settings.rotationLock) applyLandscapeDirection();
-    reflowCanvasSafely();
-  });
-  // CSSの回転トランジション・アドレスバー変化が収まった後にもう一度（最終確定）
-  reflowTimer = setTimeout(() => {
-    if (settings.rotationLock) applyLandscapeDirection();
-    reflowCanvasSafely();
-  }, 260);
+  reflowRAF = requestAnimationFrame(reflowCanvasSafely);
+  reflowTimer = setTimeout(reflowCanvasSafely, 260);
 }
-window.addEventListener("resize", scheduleCanvasReflow);
-window.addEventListener("orientationchange", scheduleCanvasReflow);
+// resize/orientationchange/visualViewportいずれも capture フェーズで最速受信し、
+// ロック中であれば即座に握りつぶして下流の処理へ一切伝播させない
+function guardedReflow(e) {
+  if (settings.rotationLock) return;
+  scheduleCanvasReflow();
+}
+window.addEventListener("resize", guardedReflow, { capture: true });
+window.addEventListener("orientationchange", guardedReflow, { capture: true });
 if (window.visualViewport) {
-  window.visualViewport.addEventListener("resize", scheduleCanvasReflow);
-}
-if (window.matchMedia) {
-  const mq = window.matchMedia("(orientation: landscape)");
-  const mqHandler = () => scheduleCanvasReflow();
-  if (mq.addEventListener) mq.addEventListener("change", mqHandler);
-  else if (mq.addListener) mq.addListener(mqHandler); // 旧Safari互換
+  window.visualViewport.addEventListener("resize", guardedReflow, { capture: true });
 }
 
 /* ---- 全消去マーカー {m:"x"} 以降のストロークだけが「見えている」内容 ---- */
@@ -1931,63 +1909,66 @@ function toast(msg) {
       settings.rotationLock = rotToggle.checked;
       saveSettings();
       applyRotationLock();
-      scheduleCanvasReflow();   // 固定/解除の切替直後もキャンバスサイズを確実に追従させる
       toast(rotToggle.checked ? "縦向きに固定しました" : "自由に回転できるようになりました");
     });
   }
 })();
 
 /* =====================================================
- * 画面回転制御
+ * 画面回転制御（凍結ロック方式）
  * - screen.orientation.lock() はブラウザ非対応・非スタンドアロン
  *   環境（通常のタブ表示など）では動作しないため補助的に試みるのみ。
- * - 確実に効くのは、横向き検知時に <html> へクラスを付与し、
- *   CSSでbody全体を90度回転させて縦向きの見た目を維持する方式
- *   （実際の横向き判定は CSS の @media(orientation) が担当し、
- *    「右に倒したか／左に倒したか」の回転方向だけJSが判定して
- *    rot-cw / rot-ccw クラスを付与する）。
+ * - 確実に効くのは、ロックON時点の「縦向きの実ピクセルサイズ」を
+ *   一度だけ記憶し、<html>/<body> に position:fixed + 固定px の
+ *   width/height をインラインstyleで注入して画面を完全凍結する方式。
+ *   横向きへビューポートが変化しても、見た目上のレイアウトも
+ *   キャンバスのサイズも一切動かない（"崩れてから戻す"工程が存在しない）。
  * ===================================================== */
-function detectLandscapeDirection() {
-  // 標準API（Android Chrome 等）
-  const type = (screen.orientation && screen.orientation.type) || "";
-  if (type === "landscape-primary") return "cw";
-  if (type === "landscape-secondary") return "ccw";
-  // 旧式フォールバック（iOS Safari等）：window.orientation は 90 / -90
-  if (typeof window.orientation === "number") {
-    if (window.orientation === 90) return "cw";
-    if (window.orientation === -90) return "ccw";
-  }
-  return null;   // 判定不能時は直前の状態を維持
+let frozenPortraitSize = null;   // { w, h } ロック時に一度だけ確定させる基準サイズ
+
+function capturePortraitSize() {
+  const w = window.innerWidth, h = window.innerHeight;
+  // 現在すでに横向き（幅>高さ）の状態でロックした場合は、
+  // 縦横を入れ替えて「あるべき縦向きサイズ」を推定する
+  frozenPortraitSize = (w > h) ? { w: h, h: w } : { w, h };
 }
-function applyLandscapeDirection() {
+
+function freezePortrait() {
+  capturePortraitSize();
   const html = document.documentElement;
-  const dir = detectLandscapeDirection();
-  if (dir === "ccw") {
-    html.classList.add("rot-ccw");
-    html.classList.remove("rot-cw");
-  } else if (dir === "cw") {
-    html.classList.add("rot-cw");
-    html.classList.remove("rot-ccw");
-  } else if (!html.classList.contains("rot-cw") && !html.classList.contains("rot-ccw")) {
-    html.classList.add("rot-cw");   // 初回・判定不能時のデフォルト
+  const body = document.body;
+  html.classList.add("force-portrait");
+  const style = `position:fixed; top:0; left:0; margin:0; padding:0; ` +
+                `width:${frozenPortraitSize.w}px; height:${frozenPortraitSize.h}px; ` +
+                `overflow:hidden;`;
+  html.style.cssText += style;
+  body.style.cssText += style;
+  // 対応環境ではネイティブAPIのロックも補助的に試みる（失敗は無視）
+  if (screen.orientation && screen.orientation.lock) {
+    screen.orientation.lock("portrait-primary").catch(() => {});
   }
+  // 凍結直後に一度だけ確定サイズでキャンバスを合わせる
+  requestAnimationFrame(reflowCanvasSafely);
 }
+
+function unfreezePortrait() {
+  const html = document.documentElement;
+  const body = document.body;
+  html.classList.remove("force-portrait");
+  for (const prop of ["position", "top", "left", "margin", "padding", "width", "height", "overflow"]) {
+    html.style.removeProperty(prop);
+    body.style.removeProperty(prop);
+  }
+  frozenPortraitSize = null;
+  if (screen.orientation && screen.orientation.unlock) {
+    try { screen.orientation.unlock(); } catch (e) {}
+  }
+  scheduleCanvasReflow();
+}
+
 function applyRotationLock() {
-  const html = document.documentElement;
-  if (settings.rotationLock) {
-    html.classList.add("force-portrait");
-    applyLandscapeDirection();
-    // 対応環境ではネイティブのロックも試みる（ベストエフォート、失敗しても無視）
-    if (screen.orientation && screen.orientation.lock) {
-      screen.orientation.lock("portrait-primary").catch(() => {});
-    }
-  } else {
-    html.classList.remove("force-portrait");
-    if (screen.orientation && screen.orientation.unlock) {
-      try { screen.orientation.unlock(); } catch (e) {}
-    }
-  }
-  scheduleCanvasReflow();   // クラス切替直後のキャンバスずれを防ぐ
+  if (settings.rotationLock) freezePortrait();
+  else unfreezePortrait();
 }
 
 /* =====================================================
